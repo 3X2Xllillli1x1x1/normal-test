@@ -1,0 +1,2947 @@
+local Library = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Knuxy92/Ui-linoria/main/Linoria.lua"))();
+local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
+local ThemeManager =  loadstring(game:HttpGet("https://raw.githubusercontent.com/Knuxy92/Ui-linoria/main/Theme.lua"))();
+local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))();
+local UserInputService = game:GetService("UserInputService")
+getgenv().Configs = {}
+_G['Normal Hub Table'] = {
+	isWindows = UserInputService:GetPlatform() == Enum.Platform.Windows,
+	TypeOs = (table.find({Enum.Platform.Windows}, game:GetService('UserInputService'):GetPlatform()) ~= nil and 'Pc') or 'Mb',
+	SizeUi = (not isWindows and UDim2.fromOffset(600,300)) or UDim2.fromOffset(560,600),
+	AutoSize = true,
+	TweenUiSize = true,
+	SpeedTweenUi = 0.25,
+	StyleTweenUi = Enum.EasingStyle.Quad,
+	Mutiply = 1.80,
+	SizeX = 550,
+	SafePercent = 20
+}
+
+wait(.5)
+_G['Normal Hub Table'].SizeUi = (not _G['Normal Hub Table'].isWindows and UDim2.fromOffset(600,300)) or UDim2.fromOffset(560,600)
+
+if not _G['Normal Hub Table'].isWindows then
+	if game.CoreGui:FindFirstChild('UIBUTTON') then
+		game.CoreGui:FindFirstChild('UIBUTTON'):Destroy()
+	end
+
+	local TweenService = game:GetService("TweenService")
+	local UserInputService = game:GetService("UserInputService")
+	local UIBUTTON = Instance.new("ScreenGui")
+	local Frame = Instance.new("Frame")
+	local ImageButton = Instance.new("ImageButton")
+	local UICorner = Instance.new("UICorner")
+	local UICorner_2 = Instance.new("UICorner")
+
+	UIBUTTON.Name = "UIBUTTON"
+	UIBUTTON.Parent = game.CoreGui
+	UIBUTTON.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+	Frame.Parent = UIBUTTON
+	Frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+	Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Frame.BorderSizePixel = 0
+	Frame.Transparency = 1
+	Frame.Position = UDim2.new(0.157012194, 0, 0.164366379, 0)
+	Frame.Size = UDim2.new(0, 115, 0, 49)
+
+	ImageButton.Parent = Frame
+	ImageButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ImageButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ImageButton.BorderSizePixel = 0
+	ImageButton.Position = UDim2.new(0.218742043, 0, -0.155235752, 0)
+	ImageButton.Size = UDim2.new(0, 64, 0, 64)
+	ImageButton.Image = "rbxassetid://18374973658"
+	ImageButton.MouseButton1Click:Connect(function()
+		game:GetService('VirtualInputManager'):SendKeyEvent(true,"RightControl",false,game)
+		game:GetService('VirtualInputManager'):SendKeyEvent(false,"RightControl",false,game)
+	end)
+
+	UICorner.CornerRadius = UDim.new(0, 100)
+	UICorner.Parent = ImageButton
+
+	UICorner_2.CornerRadius = UDim.new(0, 10)
+	UICorner_2.Parent = Frame
+
+
+	local UIS = game:GetService('UserInputService')
+	local frame = Frame
+	local dragToggle = nil
+	local dragSpeed = 0.25
+	local dragStart = nil
+	local startPos = nil
+
+	local function updateInput(input)
+		local delta = input.Position - dragStart
+		local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+			startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		game:GetService('TweenService'):Create(frame, TweenInfo.new(dragSpeed), {Position = position}):Play()
+	end
+
+	frame.InputBegan:Connect(function(input)
+		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then 
+			dragToggle = true
+			dragStart = input.Position
+			startPos = frame.Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragToggle = false
+				end
+			end)
+		end
+	end)
+
+	UIS.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			if dragToggle then
+				updateInput(input)
+			end
+		end
+	end)
+end
+
+warn('==========================')
+warn('Normal Hub Wait For Loading')
+warn('Login With '..tostring(_G['Normal Hub Table']['TypeOs']).."Device" )
+warn('Connecting Server Normal Hub Success')
+warn('==========================')
+
+local LocalPlayer, Character, HumanoidRootPart, Humanoid
+
+do
+	LocalPlayer = game and game:GetService("Players").LocalPlayer
+	PlayerStats = LocalPlayer and LocalPlayer.PlayerStats
+	task.delay(.2,function()
+		Character = LocalPlayer and LocalPlayer.Character
+		Humanoid = Character and Character.Humanoid
+		HumanoidRootPart = Character and Character.HumanoidRootPart
+	end)
+
+	HttpService = game:GetService("HttpService")
+	RunService = game:GetService('RunService')
+	ReplicatedStorage = game:GetService("ReplicatedStorage")
+	UserInputService = game:GetService('UserInputService')
+	Mouse = LocalPlayer:GetMouse()
+
+	QuestMaterial = {
+		['3350'] = {
+			['Material'] = 'Ice Crystal',
+			['Kills'] = 'Azlan [Lv. 3300]',
+			['QuestTitle'] = 'Kill 4 Azlan',
+			['Level'] = 3300
+		},
+		['3375'] = {
+			['Material'] = 'Magma Crystal',
+			['Kills'] = 'The Volcano [Lv. 3325]',
+			['QuestTitle'] = 'Kill 4 The Volcano',
+			['Level'] = 3325
+		},
+		['3475'] = {
+			['Material'] = "Dark Beard's Totem",
+			['Kills'] = 'Sally [Lv. 3450]',
+			['QuestTitle'] = 'Kill 1 Sally',
+			['Level'] = 3450
+		},
+		['3575'] = {
+			['Material'] = "Lucidus's Totem",
+			['Kills'] = 'Vice Admiral [Lv. 3500]',
+			['QuestTitle'] = 'Kill 5 Vice Admiral',
+			['Level'] = 3500
+		}
+	}
+
+	Sea = 1
+	RespawnTime = 5
+	RecentlySpawn = 0
+	DailyQuestTable = {};
+end
+
+if game.PlaceId == 4520749081 then
+	Sea = 1
+elseif game.PlaceId == 6381829480 then
+	Sea = 2
+elseif game.PlaceId == 15759515082 then
+	Sea = 3
+end
+
+if Sea == 1 then
+	DailyQuestTable = {'Daily Quest [Lv. 5]', 'Daily Quest [Lv. 10]', 'Daily Quest [Lv. 500]', 'Daily Quest [Lv. 2000]', 'Find Chicken Quest'}
+elseif Sea == 2 then
+	DailyQuestTable = {'Box Box', 'Disobey', 'Daily Quest [Lv. 3000]', 'Daily Quest [Lv. 3500]', 'Dead Above', 'Daily Quest [Lv. 3800]', 'Lore Sea Madness', 'Lore Sea Sick!', 'Lore Sea Diving', 'Lore Sea Creature'}
+elseif Sea == 3 then
+	DailyQuestTable = {'Lore Puzzle First','Lore Lost Fugitive', 'Lore Kraken Codex Easy', 'Lore Kraken Codex Hard', 'Lore Into the Bubble-Verse', 'Lore The Pillar', 'Lore the Depth'}
+end
+
+local Window = Library:CreateWindow({
+	Title = "Normal Hub | Premium Script King Legacy",
+	Center = true,
+	AutoShow = true,
+	TabPadding = 8,
+	MenuFadeTime = 0.2,
+	Size = _G['Normal Hub Table'].SizeUi
+});
+
+local Tab = {
+	General = Window:AddTab('General'),
+	Player = Window:AddTab("Player & Teleport"),
+	Misc = Window:AddTab("Misc"),
+	['UI Settings'] = Window:AddTab(' Setting UI '),
+};
+
+local Configs = {
+	RawStand = 7.3,
+	standmethod = CFrame.new(0,7.3,0.15) * CFrame.Angles(math.rad(-90),0,0)
+}
+
+getgenv().Configs =  Configs
+
+local OldSe;
+Settings = {}
+previousSettings = {}
+foldername = "Normal Hub";
+filename = game.Players.LocalPlayer.Name.." Config.json"
+spawn(function()
+	while wait() do
+		for key, value in pairs(getgenv().Configs) do
+			if previousSettings[key] ~= value then
+				for key, value in pairs(getgenv().Configs) do
+					previousSettings[key] = value
+					local HttpService = game:GetService("HttpService")
+					local json = HttpService:JSONEncode(getgenv().Configs)
+					if writefile then
+						if isfolder(foldername) then
+							if isfolder(foldername.."/King Legacy") then
+								writefile(foldername.."/King Legacy/"..filename, json)
+							else
+								makefolder(foldername.."/King Legacy")
+								writefile(foldername.."/King Legacy"..filename, json)
+							end
+						else
+							makefolder(foldername)
+							makefolder(foldername.."/King Legacy")
+							writefile(foldername.."/King Legacy/"..filename, json)
+						end
+					end
+				end
+			end
+		end
+	end
+end)
+
+
+
+function LoadSettings()
+	local HttpService = game:GetService("HttpService")
+	if isfile("Normal Auto Loading") then
+		if readfile("Normal Auto Loading") == ("true" or true) then
+			if isfile(foldername.."/King Legacy/"..filename) then
+				for i, v in pairs(HttpService:JSONDecode(readfile(foldername.."/King Legacy/"..filename))) do
+					if getgenv().Configs[i] ~= v then
+						getgenv().Configs[i] = v
+					end
+				end
+			else
+				getgenv().Configs = Configs
+			end
+		end
+	end
+end
+
+LoadSettings()
+
+function UpdateStandMethond()
+	if Configs['FlightAt'] == "Above" then
+		Configs['standmethod'] =  CFrame.new(0,Configs["RawStand"],0.15) * CFrame.Angles(math.rad(-90),0,0)
+	elseif Configs['FlightAt'] == "Normal" then
+		Configs['standmethod'] =  CFrame.new(0,Configs["RawStand"],-7) 
+	elseif Configs['FlightAt'] == "Below" then
+		Configs['standmethod'] =  CFrame.new(0,-Configs["RawStand"],-1) * CFrame.Angles(math.rad(90),0,0)
+	else
+		Configs['standmethod'] =  CFrame.new(0,Configs["RawStand"],0.15) * CFrame.Angles(math.rad(-90),0,0)
+	end
+end
+
+do -- Script
+	
+	function ReadyHave(NameSword)
+		if NameSword == "Mom Blade [ Legendary ]" then
+			NameSword = "Mom Blade"
+		end
+		for i,v in ipairs(game.Players.LocalPlayer.Inventory:GetChildren()) do
+			if v.Name == NameSword then
+				return true
+			end
+		end
+
+		return false
+	end
+
+	Tp = function(Position, NoBodyClip)
+		pcall(function()
+			Character = LocalPlayer and LocalPlayer.Character or LocalPlayer:FindFirstChild('Character')
+			if LocalPlayer and LocalPlayer:FindFirstChild('Character') and LocalPlayer.Character.Humanoid.Sit == true then LocalPlayer.Character.Humanoid.Sit = false end
+			for _, v in pairs(LocalPlayer.Character:GetDescendants()) do if v:IsA("BasePart") then v.CanCollide = false end end
+			if not NoBodyClip and Character and not Character.UpperTorso:FindFirstChild("BodyClip") then 
+				local Noclip = Instance.new("BodyVelocity") 
+				Noclip.Name,Noclip.Parent = "BodyClip", Character.UpperTorso 
+				Noclip.MaxForce,Noclip.Velocity = Vector3.new(0,math.huge,0), Vector3.new(0,1,0) 
+			elseif not NoBodyClip and Character and Character.UpperTorso:FindFirstChild("BodyClip") then
+				if Character and Character.UpperTorso:FindFirstChild("BodyClip") then 
+					Character.UpperTorso:FindFirstChild("BodyClip").MaxForce = Vector3.new(0,math.huge,0)
+					Character.UpperTorso:FindFirstChild("BodyClip").Velocity = Vector3.new(0,0,0) 
+				end
+			end
+			Humanoid:ChangeState(11)
+			Humanoid:ChangeState(14)
+			Character.HumanoidRootPart.CFrame = Position
+		end)
+	end
+
+	CloseQuest = function()
+		local oldSize
+		local oldPosition
+		for index, value in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard:GetChildren()) do
+			if value.Name == "Close" then
+				oldSize = value.Size
+				oldPosition = value.Position
+				value.Size,value.BackgroundTransparency = UDim2.new(1001, 0, 1001, 0), 1
+				value.Position = UDim2.new(-10, 0, -50, 0)
+				wait(.5)
+				value.Size,value.BackgroundTransparency = oldSize, .5
+				value.Position = oldPosition
+			end
+		end
+		game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
+		game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
+	end
+
+	getPlayerMaterial = function(Value)
+		local HttpService = game:GetService("HttpService")
+		for gatMaterial, numMaterial in pairs(HttpService:JSONDecode(LocalPlayer.PlayerStats.Material.Value)) do
+			if gatMaterial == Value then
+				return numMaterial
+			end
+		end
+		return 0
+	end
+
+	_getCurrentLevel = function(SecondQuest)
+		local Quests = {LevelRequired = 0, Mob = "kuy", QuestTitle = "Yes ur mom 1 time"}
+		for QuestTitle, Quest in pairs(require(game.ReplicatedStorage.Chest.Modules.QuestManager)) do
+			if not Quest['DailyQuest'] then
+				local firstLv = Quest["Level"] == 0 and 1
+				if game.Players.LocalPlayer.PlayerStats.lvl.Value >= Quest['Level']and tostring(Quest['Mob']):find(tostring(firstLv or Quest.Level)) then
+					table.insert(Quests, {
+						LevelRequired = Quest['Level'] or 1,
+						Mob = Quest['Mob'],
+						QuestTitle = tostring(QuestTitle),
+					})
+				end
+			end
+		end
+
+		table.sort(Quests, function(a, b) return a.LevelRequired > b.LevelRequired  end)
+
+		if LocalPlayer.PlayerStats.lvl.Value >= 4000 and Sea == 2 then
+			Quests[1]['Mob'] = "Ryu [Lv. 3975]"
+			Quests[1]['LevelRequired'] = 3950
+			Quests[1]['QuestTitle'] = 'Kill 1 Ryu'
+		end
+		if LocalPlayer.PlayerStats.lvl.Value >= 2200 and Sea == 1 then
+			Quests[1]['Mob'] = "Seasoned Fishman [Lv. 2200]"
+			Quests[1]['LevelRequired'] = 2200
+			Quests[1]['QuestTitle'] = 'Kill 1 Seasoned Fishman'
+		end
+		for qml, valuaqml in pairs(QuestMaterial) do
+			if Quests[1]['LevelRequired'] == tonumber(qml) then
+				local findMon;
+				for __, checkmon in pairs(workspace.Monster.Mon:GetChildren()) do
+					if checkmon.Name == Quests[1]['Mob']  and checkmon:FindFirstChild("Humanoid") and checkmon:FindFirstChild("HumanoidRootPart") and checkmon.Humanoid.Health > 0 then
+						findMon = true
+					end
+				end
+				for __, checkmon in pairs(workspace.Monster.Boss:GetChildren()) do
+					if checkmon.Name == Quests[1]['Mob']  and checkmon:FindFirstChild("Humanoid") and checkmon:FindFirstChild("HumanoidRootPart") and checkmon.Humanoid.Health > 0 then
+						findMon = true
+					end
+				end
+				for __, checkmon in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+					if checkmon.Name == Quests[1]['Mob']  and checkmon:FindFirstChild("Humanoid") and checkmon:FindFirstChild("HumanoidRootPart") and checkmon.Humanoid.Health > 0 then
+						findMon = true
+					end
+				end
+
+				if getPlayerMaterial(valuaqml['Material']) <= 0 and not findMon then
+					Quests[1]['Mob'] = valuaqml['Kills']
+					Quests[1]['LevelRequired'] = valuaqml['Level']
+					Quests[1]['QuestTitle'] = valuaqml['QuestTitle']
+				elseif getPlayerMaterial(valuaqml['Material']) > 0 and not findMon then
+					local args = {
+						[1] = "QuestSpawnBoss",
+						[2] = {
+							["SuccessQuest"] = "Quest Accepted.",
+							["BossName"] = Quests[1]['Mob'],
+							["LevelNeed"] =  Quests[1]['LevelRequired'],
+							["QuestName"] = Quests[1]['QuestTitle'],
+							["MaterialNeed"] = valuaqml['Material'],
+						}
+					}
+					game:GetService("ReplicatedStorage"):WaitForChild("Chest"):WaitForChild("Remotes"):WaitForChild("Functions"):WaitForChild("EtcFunction"):InvokeServer(unpack(args))
+				end
+			end
+		end
+
+		return Quests[1]
+	end
+
+	_getNumNpcQuest = function(number)
+		local currentQuest = {}
+		local number = number or _getCurrentLevel().LevelRequired 
+		for _, npc in pairs(game:GetService("Workspace"):FindFirstChild("AllNPC"):GetChildren()) do
+			if npc:GetAttribute("LevelMax") then
+				if LocalPlayer.PlayerStats.lvl.Value >= 950 and LocalPlayer.PlayerStats.lvl.Value <= 999 then
+					return 900
+				end
+				if npc:GetAttribute("LevelMax") >= number then
+					table.insert(currentQuest, npc:GetAttribute("LevelMax"))
+				end
+			end
+		end
+		return math.min(table.unpack(currentQuest))
+	end
+
+	local tata = 0
+	_getCFrameNpcQuest = function(number) 
+		for _, npc in pairs(game:GetService("Workspace"):FindFirstChild("AllNPC"):GetChildren()) do
+			if npc:GetAttribute("LevelMax") then
+				if npc:GetAttribute("LevelMax") == _getNumNpcQuest(number) then
+					return {
+						['Name'] = npc.Name,
+						['CFrame'] = npc.CFrame *  CFrame.new(0,5,10)
+					}
+				end
+				task.wait()
+			end
+		end
+		return  {
+			['Name'] = nil,
+			['CFrame'] = CFrame.new(0,0,0)
+		}
+	end
+
+	-- game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = QuestTitle()['NpcCframe']
+
+	myWeapon = { ["Melee"] = "",  ["Sword"] = "",["Fruit"] = ""}
+
+	EquipTools = function(ToolSe)
+		if game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe) then
+			local Tool = game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe)
+			game.Players.LocalPlayer.Character.Humanoid:EquipTool(Tool)
+		end
+	end
+
+
+	Equip = function(tool)
+		Char = LocalPlayer and LocalPlayer.Character
+		if not (tool or Char) then return end
+		if type(tool) == "string" then
+			tool = LocalPlayer.Backpack:FindFirstChild(tool)
+		end
+		if tool and tool.Parent ~= Char then
+			local Human = Char:FindFirstChild("Humanoid")
+			if Human then
+				Char.Humanoid:EquipTool(tool)
+			end
+		end
+	end
+	local TaskAttack = {}
+	function attack()
+		local Tool = Character and Character:FindFirstChildOfClass("Tool")
+		for _, tool in pairs(LocalPlayer.Backpack:GetChildren()) do
+			if tool.ClassName == "Tool" then
+				if tool.ToolTip == "Sword" then
+					myWeapon["Sword"] = tostring(tool.Name)
+				elseif tool.ToolTip == "Combat" then
+					myWeapon["Melee"] = tostring(tool.Name)
+				end
+			end
+		end
+
+		
+		if Configs.doubleattack then
+			Equip(myWeapon["Sword"])
+			
+			TaskAttack[1] = task.spawn(function()
+				local Count = 0
+				while true do
+					ReplicatedStorage.Chest.Remotes.Functions.SkillAction:InvokeServer("SW_"..myWeapon["Sword"].."_M1")
+					Count += 1
+					if Count >= 5 then
+						wait(.2)
+						Count = 0
+					end
+				end
+			end)
+		end
+		
+		TaskAttack[2] =task.spawn(function()
+			local Count = 0
+			while true do
+				ReplicatedStorage.Chest.Remotes.Functions.SkillAction:InvokeServer("FS_"..myWeapon["Melee"].."_M1")
+				Count += 1
+				if Count >= 5 then
+					wait(.2)
+					Count = 0
+				end
+			end
+		end)
+		
+		delay(0.1,function()
+			for i,v in TaskAttack do
+				task.cancel(v)
+			end
+		end)
+	end
+
+	dist = function(a,b,noHeight)
+		if not b then
+			b = Character and Character.HumanoidRootPart.Position
+		end
+		return (Vector3.new(a.X,not noHeight and a.Y,a.Z) - Vector3.new(b.X,not noHeight and b.Y,b.Z)).magnitude
+	end
+
+
+
+	function AddClip(Parent, Name)
+		if Parent:FindFirstChild(Name) and Parent:FindFirstChild(Name).ClassName == "BodyVelocity" then
+			Parent:FindFirstChild(Name).MaxForce = Vector3.new(0,math.huge,0)
+			Parent:FindFirstChild(Name).Velocity = Vector3.new(0,0,0) 
+			return true
+		end
+		local BodyClip = Instance.new("BodyVelocity")
+		BodyClip.Parent = Parent
+		BodyClip.Name = Name or "BodyVelocity"
+		BodyClip.MaxForce = Vector3.new(0,math.huge,0)
+		BodyClip.Velocity = Vector3.new(0,-0.5,0) 
+		return "Add Success"
+	end
+
+	function DelClip(Parent, Name)
+		if Parent:FindFirstChild(Name) and Parent:FindFirstChild(Name).ClassName == "BodyVelocity" then
+			Parent:FindFirstChild(Name):Destroy()
+			return true
+		end
+	end
+
+	task.spawn(function()
+		while task.wait(.25) do
+			pcall(function()
+				local parts = {}
+				local nearbymob
+				for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+					if v and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+						if dist(v.HumanoidRootPart.Position) <= 12 then
+							AddClip(v.UpperTorso, "BodyClip") 
+							nearbymob = true
+							attack()
+						else
+							DelClip(v.UpperTorso, "BodyClip")
+						end
+					end
+				end
+				for i,v in pairs(workspace.MOB:GetChildren()) do
+					if v and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+						if dist(v.HumanoidRootPart.Position) <= 12 then
+							AddClip(v.UpperTorso, "BodyClip") 
+							nearbymob = true
+							attack()
+						else
+							DelClip(v.UpperTorso, "BodyClip")
+						end
+					end
+				end
+				for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+					if v and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+						if dist(v.HumanoidRootPart.Position) <= 12 then
+							AddClip(v.UpperTorso, "BodyClip") 
+							nearbymob = true
+							attack()
+						else
+							DelClip(v.UpperTorso, "BodyClip")
+						end
+					end
+				end
+			end)
+		end
+	end)
+
+	getQuestOld = function(Position)
+		Tp(Position)
+		for i = 1,3 do wait()
+			game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
+			game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
+		end 
+		wait(1)
+		for index, value in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetDescendants()) do
+			if value.Name == 'Dialogue' and value:FindFirstChild('Accept') then
+				value.Accept.Size,value.Accept.Text.TextTransparency = UDim2.new(1001, 0, 1001, 0), 1
+				value.Accept.Position, value.Accept.AnchorPoint = UDim2.new(.5, 0, .5, 0), Vector2.new(0.5, 0.5)
+			elseif value.Name == 'Dialogue' and value:FindFirstChild('QuestAccept') then
+				value['Quest 1'].Size,value['Quest 1'].Text.TextTransparency = UDim2.new(1001, 0, 1001, 0), 1
+				value['Quest 1'].Position, value['Quest 1'].AnchorPoint = UDim2.new(.5, 0, .5, 0), Vector2.new(0.5, 0.5)
+				game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
+				game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
+				value['QuestAccept'].Size,value['QuestAccept'].Text.TextTransparency = UDim2.new(1001, 0, 1001, 0), 1
+				value['QuestAccept'].Position, value['QuestAccept'].AnchorPoint = UDim2.new(.5, 0, .5, 0), Vector2.new(0.5, 0.5)
+			end
+		end
+		warn('getQuestOld Runings!!')
+		wait(.2)
+		for i = 1,3 do wait()
+			game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
+			game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
+		end
+	end
+
+	gethui = gethui or function()
+		return game.CoreGui
+	end
+
+	renderscreen = function(state, black)
+		game:GetService('RunService'):Set3dRenderingEnabled(state)
+		if state == true and LocalPlayer.PlayerGui:FindFirstChild('Black Screen') then
+			LocalPlayer.PlayerGui:FindFirstChild('Black Screen'):Destroy()
+		end
+		if black and not state and not LocalPlayer.PlayerGui:FindFirstChild('Black Screen') then
+			local Par = Instance.new('ScreenGui')
+			Par.Name = 'Black Screen'
+			Par.Parent = LocalPlayer.PlayerGui
+			local ui = Instance.new("Frame")
+			ui.BackgroundColor3 = Color3.new(0,0,0)
+			ui.BackgroundTransparency = 0
+			ui.Size = UDim2.fromScale(1,1)
+			ui.ZIndex = -999
+			ui.Parent = Par
+		end
+	end
+
+	Hop_Full = function()
+		repeat 		task.wait(math.random(0.1,0.3))
+			if request then
+				local servers = {}
+				local req = request(
+					{
+						Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", game.PlaceId)
+					}
+				).Body;
+				local body = game:GetService("HttpService"):JSONDecode(req)
+				if body and body.data then
+					for i, v in next, body.data do
+						if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= game.JobId then
+							table.insert(servers, 1, v.id)
+						end
+					end
+				end
+				if #servers > 0 then
+					game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], game.Players.LocalPlayer)
+				else
+					return "Couldn't find a server."
+				end
+			end
+		until game.JobId ~= game.JobId
+	end
+
+	comma = function(Value)
+
+		local Calculated = Value
+		while true do
+			local Text, Amount = string.gsub(Calculated, "^(-?%d+)(%d%d%d)", "%1,%2")
+			Calculated = Text
+			if Amount == 0 then break end
+		end
+		return Calculated
+	end
+
+	HopServer = function(FullServer) -- Hop Server (Low)
+		local FullServer = Options or false
+
+		local Http = game:GetService("HttpService")
+		local Api = "https://games.roblox.com/v1/games/"
+
+		local _place = game.PlaceId
+		local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100"
+		local ListServers = function (cursor)
+			local Raw = game:HttpGet(_servers .. ((cursor and "&cursor="..cursor) or ""))
+			return Http:JSONDecode(Raw)
+		end
+
+		local Server, Next; repeat
+			local Servers = ListServers(Next)
+			Server = Servers.data[1]
+			Next = Servers.nextPageCursor
+		until Server
+
+		repeat
+			if not FullServer then
+				game:GetService("TeleportService"):TeleportToPlaceInstance(_place,Server.id,game.Players.LocalPlayer)
+			else
+				Hop_Full()
+			end
+			wait()
+		until game.PlaceId ~= game.PlaceId
+	end
+
+	Rejoin = function(options)
+		game:GetService("TeleportService"):TeleportToPlaceInstance(game.placeId, game.jobId, game.Players.LocalPlayer);
+	end
+
+end
+
+function GetPositionIsland()
+	local Positions = {}
+
+	for _, SpawnPoint in ipairs(workspace.SpawnPoints:GetChildren()) do
+		local spawnPos = SpawnPoint.Position
+
+		for _, Island in ipairs(workspace.Island:GetChildren()) do
+			if Island.Name:sub(3,3) == '-' then
+				local islandPos = Island:GetPivot().Position
+				if (islandPos - spawnPos).magnitude < 500 then
+					Positions[Island.Name:sub(4):gsub(" ", "")] = Island:GetPivot()
+				end
+			end
+		end
+	end
+
+	for _, Island in ipairs(workspace.Island:GetChildren()) do
+		if Island.Name:sub(3,3) ~= '-' then
+			if (Island:IsA('Model') or Island:IsA('Part')   ) and Island:GetPivot() then
+				Positions[Island.Name:gsub(" ", ""):gsub("+", "")] = Island:GetPivot()
+			end
+		end
+	end
+
+	return Positions
+end
+
+local function FindClosestSafezone()
+	local closestSafezone = nil
+	local shortestDistance = math.huge
+	local playerPosition = game.Players.LocalPlayer.Character:FindFirstChild('HumanoidRootPart').Position
+
+	for _, safezone in ipairs(workspace.Safezone:GetChildren()) do
+		local distance = (safezone.Position - playerPosition).magnitude
+		if distance < shortestDistance then
+			shortestDistance = distance
+			closestSafezone = safezone
+		end
+	end
+
+	return closestSafezone
+end
+
+local f = {}
+f.Activate = {}
+ac=f.Activate
+
+ac.Buso = task.spawn(function()
+	while task.wait() do
+		if Configs.Auto_Use_Haki then
+			LocalPlayer = game.Players.LocalPlayer
+			local char = LocalPlayer and LocalPlayer.Character
+			repeat wait() until char or (not char and (tick() - RecentlySpawn) > RespawnTime)
+
+			if char:WaitForChild("Services"):FindFirstChild("Haki") and char:WaitForChild("Services"):FindFirstChild("Haki").Value == 0 then
+				LocalPlayer.PlayerStats.BusoShopValue.Value = 'BusoHaki'
+				game:GetService("ReplicatedStorage").Chest.Remotes.Events.Armament:FireServer()
+				repeat wait(1) until char:WaitForChild("Services"):FindFirstChild("Haki").Value == 1
+			end
+		end
+	end
+end)
+
+ac.Ken = function()
+	if not LocalPlayer.Character.Services.KenOpen then
+		game:GetService("Players").LocalPlayer.PlayerStats.KenShopValue.Value = 'KenHaki'
+		game:GetService("ReplicatedStorage").Chest.Remotes.Functions.KenEvent:InvokeServer()
+	end
+end
+
+ac.unlock_soru = function()
+	game.Players.LocalPlayer.PlayerStats.Soru.Value = "Soru"
+end
+
+local Item = {}
+Item.SwordOnCooldown = function(Skill)
+	if Skill ~= "X" or Skill ~= "Z"  then
+		return false
+	end
+	local LocalPlayer = game.Players.LocalPlayer
+	local SwordFrame = LocalPlayer.PlayerGui.SkillCooldown.SWFrame
+	return SwordFrame[string.upper(Skill) or "X"].Frame.Frame.AbsoluteSize.X > 0
+end
+
+local skillUseIng
+f.useSkill = function()
+	local Tool = Character and Character:FindFirstChildOfClass("Tool")
+	if Tool and Configs['Auto Skill Toggle']  then
+		for _i, _v in next, Configs["Auto Use Skill"] do
+			if type(_i) == 'string' and not Item.SwordOnCooldown(_i) then
+				delay(math.random(1,3),function()
+					game:service('VirtualInputManager'):SendKeyEvent(true, _i, false, game)
+					game:service('VirtualInputManager'):SendKeyEvent(false, _i, false, game)
+				end)
+			end
+		end
+	end
+end
+
+f.useSkill2 = function()
+	local Tool = Character and Character:FindFirstChildOfClass("Tool")
+	if Tool then
+		for _i, _v in Configs["Auto Use Skill"] do
+			if type(_i) == 'string' and not Item.SwordOnCooldown(_i) then
+				game:service('VirtualInputManager'):SendKeyEvent(true, _i, false, game)
+				game:service('VirtualInputManager'):SendKeyEvent(false, _i, false, game)
+			end
+		end
+	end
+end
+
+
+local loadislan = false
+f.attackMonter = function(inTable , addshared)
+	for _, npc in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+		if npc and table.find(inTable, npc.Name) and npc:FindFirstChild("HumanoidRootPart") then
+			Tp(npc:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,6,0))
+		end
+	end
+	for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+		if v and table.find(inTable, v.Name) and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+			repeat task.wait()
+				getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+				Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+				f.useSkill()
+			until not Configs[tostring(addshared)] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0
+		end
+	end
+	for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+		if v and table.find(inTable, v.Name) and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+			repeat task.wait()
+				getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+				Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+				f.useSkill()
+			until not Configs[tostring(addshared)] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0
+		end
+	end
+end
+
+f.findEnemies = function(EnemiesName)
+	if Sea == 2 then
+		SeaMonster, CheckGhost = game:GetService("Workspace").SeaMonster:GetChildren(), game.Workspace:FindFirstChild("GhostMonster"):GetChildren()
+	else
+		SeaMonster, CheckGhost = game:GetService("ReplicatedStorage").MOB:GetChildren(), game:GetService("ReplicatedStorage").MOB:GetChildren()
+	end
+	local function isValidEnemy(enemy)
+		return enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0
+	end
+	local function checkEnemies(enemies)
+		for _, enemy in pairs(enemies) do
+			if table.find(EnemiesName, enemy.Name) and isValidEnemy(enemy) then
+				return true
+			end
+		end
+		return false
+	end
+	return checkEnemies(workspace.Monster.Mon:GetChildren()) or checkEnemies(workspace.Monster.Boss:GetChildren()) or checkEnemies(CheckGhost) or checkEnemies(SeaMonster) or checkEnemies(game:GetService("ReplicatedStorage").MOB:GetChildren())
+end
+
+f.CheckTool = function()
+	local Tool = Character and Character:FindFirstChildOfClass("Tool")
+	for _, tool in pairs(LocalPlayer.Backpack:GetChildren()) do
+		if tool.ClassName == "Tool" then
+			if tool.ToolTip == "Sword" then
+				myWeapon["Sword"] = tostring(tool.Name)
+			elseif tool.ToolTip == "Combat" then
+				myWeapon["Melee"] = tostring(tool.Name)
+			end
+		end
+	end
+	return myWeapon
+end
+
+f.checkCloseQuest = function(mons, lvMon)
+	local setName = string.gsub(mons, ' %[Lv%. '.. lvMon ..'%]', '')
+	if mons ~= 'High-class Soldier [Lv. 1050]' then
+		if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+			if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find(setName) then
+				CloseQuest()
+			end
+		end
+	end
+end
+
+f.needHit = function(Monster)
+	local monNeedHit = 0
+	for i, v in pairs(workspace.Monster.Mon:GetChildren()) do
+		if v.Name == Monster then
+			if not v:FindFirstChild('monHit') then
+				monNeedHit = monNeedHit + 1
+			end
+		end
+	end
+	if monNeedHit <= 0 then
+		return false
+	end
+	return true
+end
+
+
+local NpcQuest = _getCFrameNpcQuest()
+f.autofarm = function()
+	pcall(function()
+		while Configs.autofarm and task.wait() do
+			UpdateStandMethond()
+			local QuestInfo = _getCurrentLevel()
+
+
+			f.checkCloseQuest(QuestInfo['Mob'], QuestInfo['LevelRequired'])
+
+			if not (LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible) then
+				Tp(NpcQuest['CFrame'])
+
+				ReplicatedStorage:WaitForChild("Chest").Remotes.Functions.Quest:InvokeServer(unpack({
+					[1] = "take",
+					[2] = QuestInfo['QuestTitle']
+				}))
+				NpcQuest = _getCFrameNpcQuest()
+			end
+
+			if LocalPlayer.CurrentQuest.Value ~= QuestInfo["QuestTitle"] then
+				Tp(NpcQuest['CFrame'])
+				ReplicatedStorage:WaitForChild("Chest").Remotes.Functions.Quest:InvokeServer(unpack({
+					[1] = "take",
+					[2] = QuestInfo['QuestTitle']
+				}))
+			end
+
+			if LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+				if (not workspace.Monster.Mon:FindFirstChild(QuestInfo['Mob']) or not workspace.Monster.Boss:FindFirstChild(QuestInfo['Mob'])) then
+					for _, npc in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+						if npc and npc.Name == QuestInfo['Mob'] and npc:FindFirstChild("HumanoidRootPart") then
+							Tp(npc:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,6,0))
+						end
+					end
+				end
+				if not f.CheckMon(QuestInfo['Mob']) then
+					local gaybank = CFrame.new(30279.0625, 69.36441802978516, 93166.2734375)
+					if QuestInfo['Mob'] == 'Dough Master [Lv. 3275]' and QuestInfo['LevelRequired'] == 3275 then
+						Tp(gaybank)		
+					else
+						local Count = 0
+						repeat
+							if Count >= 10 then
+								Tp(NpcQuest['CFrame'] * CFrame.new(math.random(-300,300), math.random(0,100), math.random(-300,300)))
+							else
+								Tp(NpcQuest['CFrame'] * CFrame.new(0,20,0))
+								Count += 1
+							end
+							Tp(NpcQuest['CFrame'] * CFrame.new(math.random(-300,300), math.random(0,100), math.random(-300,300)))
+							wait(.2)
+							f.checkCloseQuest(QuestInfo['Mob'], QuestInfo['LevelRequired'])
+						until  f.CheckMon(QuestInfo['Mob']) or not Configs.autofarm or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible 
+					end
+				end
+				for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+					if v and v.Name == QuestInfo['Mob'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+						if not v:FindFirstChild('monHit') then
+							repeat task.wait()
+								getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+								Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+								f.useSkill()
+								delay( 1, function() 
+									local monHit = Instance.new('Folder', v)
+									monHit.Name = 'monHit' 
+								end)
+							until not Configs.autofarm or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible or v:FindFirstChild('monHit')
+						elseif v:FindFirstChild('monHit') and not f.needHit(QuestInfo['Mob']) then
+							repeat task.wait()
+								getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+								Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+								f.useSkill()
+								f.checkCloseQuest(QuestInfo['Mob'], QuestInfo['LevelRequired'])
+							until not Configs.autofarm or f.needHit(QuestInfo['Mob']) or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible
+						end
+					end
+				end
+				for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+					if v and v.Name == QuestInfo['Mob'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+						repeat task.wait()
+							getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+							Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+							f.useSkill()
+							f.checkCloseQuest(QuestInfo['Mob'], QuestInfo['LevelRequired'])
+						until not Configs.autofarm or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible	
+					end
+				end
+			end
+		end
+	end)
+end
+
+
+f.AutoUpgradeStats = task.spawn(function()
+	while task.wait(0.3) do
+		pcall(function()
+			if Configs["Auto Upgrades"] and LocalPlayer.PlayerStats.Points.Value > 0 then
+				for stat, v in next, Configs.Stats_Upgrade do
+					LocalPlayer.PlayerGui.MainGui.StarterFrame.StatsFrame.RemoteEvent:FireServer(unpack({
+						[1] = stat,
+						[2] = Configs.StatsUsed or 1
+					}))
+				end
+			end
+		end)
+	end
+end)
+
+
+
+f.CheckDailyQuest = function(Value)
+	local HttpService = game:GetService("HttpService")
+	for gatDailyQuest,_ in pairs(HttpService:JSONDecode(game:GetService("Players").LocalPlayer.PlayerStats.DailyQuest.Value)) do
+		if gatDailyQuest == Value then
+			return true
+		end
+	end
+	return false
+end
+
+local tweenService = game:GetService("TweenService")
+local info = TweenInfo.new()
+
+f.tweenModel = function(model, CF)
+	local CFrameValue = Instance.new("CFrameValue")
+	CFrameValue.Value = model:GetPrimaryPartCFrame()
+
+	CFrameValue:GetPropertyChangedSignal("Value"):Connect(function()
+		model:SetPrimaryPartCFrame(CFrameValue.Value)
+	end)
+
+	local tween = tweenService:Create(CFrameValue, info, {Value = CF})
+	tween:Play()
+
+	tween.Completed:Connect(function()
+		CFrameValue:Destroy()
+	end)
+end
+
+local PostmessageNames = "Noen"
+local Puzzle = {
+	'Moon', 'Shire', 'Night',
+	'Bright', 'Dark', 'Fearful',
+	'Heroi', 'Faller', 'Savior'
+}
+
+f.RunAutoDailyQuest = spawn(function()
+	pcall(function()
+		while task.wait(.25) do
+			if not Configs['AutoDailyQuest'] then
+				continue
+			end
+			if Sea == 1 then
+				if Configs['Select Daily Quest'] == 'Daily Quest [Lv. 5]' and not f.CheckDailyQuest('Forget and Forgot') then
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Find out Where's 'Old Man'") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Daily QuestLvl5"].CFrame)
+						mouse1click()
+					else
+						getQuestOld(workspace.AllNPC["Civilian Old"].CFrame)
+						wait(.2)
+					end
+				elseif Configs['Select Daily Quest'] == 'Daily Quest [Lv. 10]' and not f.CheckDailyQuest('Venture Lagoons!') then
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Sea Explored") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Lore Venturer"].CFrame)
+						mouse1click()
+					else
+						if workspace.Ships:FindFirstChild(LocalPlayer.Name ..' Ship') then
+							if LocalPlayer.Character.Humanoid.Sit == false then
+								Tp(workspace.Ships:WaitForChild(LocalPlayer.Name ..' Ship'):FindFirstChild('VehicleSeat').CFrame)
+							else
+								if workspace.SpawnItem:FindFirstChild('Venture Lagoons!') then
+									for i,v in pairs(workspace.SpawnItem:GetChildren()) do
+										if v.Name == "Venture Lagoons!" then
+											f.tweenModel(workspace.Ships:FindFirstChild(LocalPlayer.Name ..' Ship'), v.CFrame)
+											wait(.2)
+										end
+									end
+								end
+							end
+						else
+							if workspace.Ships:FindFirstChild(LocalPlayer.Name ..' Ship') then return end
+							local args = {
+								[1] = "Rowboat",
+								[2] = "ShipA"
+							}
+
+							game:GetService("ReplicatedStorage"):WaitForChild("Chest"):WaitForChild("Remotes"):WaitForChild("Events"):WaitForChild("Ship"):FireServer(unpack(args))
+							wait(1)
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Daily Quest [Lv. 500]' and not f.CheckDailyQuest('Kill 4 King Snow') then
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("King Snow") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Daily QuestLvl500"].CFrame)
+						mouse1click()
+					else
+						local QuestInfo = {
+							['Monster'] = 'King Snow [Lv. 450]',
+							['CFrame'] = CFrame.new(-5420.73486, 28.9310017, -1512.58521, -0.997069597, 0, 0.0765115544, 0, 1, 0, -0.0765115544, 0, -0.997069597)
+						}
+						if workspace:FindFirstChild('Areas') and not loadislan then
+							for i,v in pairs(workspace.Areas:GetChildren()) do wait()
+								Tp(v.CFrame * CFrame.new(0,255,0))
+							end
+							loadislan = true
+						end
+						if (not workspace.Monster.Mon:FindFirstChild(QuestInfo['Monster']) or not workspace.Monster.Boss:FindFirstChild(QuestInfo['Monster'])) then
+							for _, npc in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+								if npc and npc.Name == QuestInfo['Monster'] and npc:FindFirstChild("HumanoidRootPart") then
+									Tp(npc:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,6,0))
+								end
+							end
+						end
+						if not f.CheckMon(QuestInfo['Monster']) then
+							Tp(QuestInfo['CFrame'] * CFrame.new( 0, 300, 0))
+						end
+						for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible
+							end
+						end
+						for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible	
+							end
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Daily Quest [Lv. 2000]' and not f.CheckDailyQuest('Kill 10 Soldier Fishman') then
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Soldier Fishman") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Daily QuestLvl2000"].CFrame)
+						mouse1click()
+					else
+						local QuestInfo = {
+							['Monster'] = 'Soldier Fishman [Lv. 2150]',
+							['CFrame'] = CFrame.new(-1743.9032, 44.9961166, 6607.52637, 0.258864343, 0, 0.965913713, 0, 1, 0, -0.965913713, 0, 0.258864343)
+						}
+						if workspace:FindFirstChild('Areas') and not loadislan then
+							for i,v in pairs(workspace.Areas:GetChildren()) do wait()
+								Tp(v.CFrame * CFrame.new(0,255,0))
+							end
+							loadislan = true
+						end
+						if (not workspace.Monster.Mon:FindFirstChild(QuestInfo['Monster']) or not workspace.Monster.Boss:FindFirstChild(QuestInfo['Monster'])) then
+							for _, npc in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+								if npc and npc.Name == QuestInfo['Monster'] and npc:FindFirstChild("HumanoidRootPart") then
+									Tp(npc:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,6,0))
+								end
+							end
+						end
+						if not f.CheckMon(QuestInfo['Monster']) then
+							Tp(QuestInfo['CFrame'] * CFrame.new( 0, 300, 0))
+						end
+						for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible
+							end
+						end
+						for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible	
+							end
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Find Chicken Quest' then
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Fry Chicken") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["FindChickenQuest"].CFrame)
+						mouse1click()
+					else
+						for i,v in pairs(workspace.SpawnItem:GetDescendants()) do
+							if v.Name == 'Fry Chicken' then
+								fireclickdetector(v.ClickDetector, math.huge)
+							end
+						end
+					end
+				end
+			elseif Sea == 2 then
+				if Configs['Select Daily Quest'] == 'Box Box' and not f.CheckDailyQuest('Box Box!') then
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("a Boxes") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						getQuestOld(workspace.AllNPC.Braveman.CFrame)
+						mouse1click()
+						print('SendKeyEvent', 'E')
+					else
+						if LocalPlayer.Character:FindFirstChild('onQuest') then
+							getQuestOld(workspace.AllNPC["Civilian Port"].CFrame)
+						else
+							Tp(workspace.AllNPC.Braveman.CFrame * CFrame.new(-5,0,0))
+							game:service('VirtualInputManager'):SendKeyEvent(true, 'E', false, game)
+							game:service('VirtualInputManager'):SendKeyEvent(false, 'E', false, game)
+							print('SendKeyEvent', 'E')
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Disobey' and not f.CheckDailyQuest('Order Disobey') then
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Cultist's Poster") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						getQuestOld(workspace.AllNPC["Daily Quest Disobey"].CFrame)
+						mouse1click()
+					else
+						for i,v in pairs(workspace.SpawnItem:GetChildren()) do
+							if v.Name == "PosterQuest" then
+								Tp(v.CFrame)
+								wait(.2)
+								fireproximityprompt(v.ProximityPrompt, 1000) wait(1)
+							end
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Daily Quest [Lv. 3000]' and not f.CheckDailyQuest('One More Time') then 
+					if LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Joey") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						getQuestOld(workspace.AllNPC["Daily QuestLvl3000"].CFrame)
+						mouse1click()
+					else
+						local QuestInfo = {
+							['Monster'] = 'Joey [Lv. 3000]',
+							['CFrame'] = CFrame.new(-5220.71338, 81.9256287, 1959.50647, 0.899158478, 0.0123226177, -0.437449604, 4.26662154e-05, 0.999601007, 0.0282456912, 0.437623113, -0.0254160166, 0.898799241)
+						}
+						if workspace:FindFirstChild('Areas') and not loadislan then
+							for i,v in pairs(workspace.Areas:GetChildren()) do wait()
+								Tp(v.CFrame * CFrame.new(0,255,0))
+							end
+							loadislan = true
+						end
+						if (not workspace.Monster.Mon:FindFirstChild(QuestInfo['Monster']) or not workspace.Monster.Boss:FindFirstChild(QuestInfo['Monster'])) then
+							for _, npc in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+								if npc and npc.Name == QuestInfo['Monster'] and npc:FindFirstChild("HumanoidRootPart") then
+									Tp(npc:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,6,0))
+								end
+							end
+						end
+						if not f.CheckMon(QuestInfo['Monster']) then
+							Tp(QuestInfo['CFrame'] * CFrame.new( 0, 300, 0))
+						end
+						for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible
+							end
+						end
+						for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible	
+							end
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Daily Quest [Lv. 3500]' and not f.CheckDailyQuest('Believer') then 
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Hefty") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						getQuestOld(workspace.AllNPC["Daily QuestLvl3500"].CFrame)
+						mouse1click()
+					else
+						local QuestInfo = {
+							['Monster'] = 'Hefty [Lv. 3550]',
+							['CFrame'] = CFrame.new(-10592.6855, 83.4090118, 1101.71484, 0, 0, 1, 0, 1, -0, -1, 0, 0)
+						}
+						if workspace:FindFirstChild('Areas') and not loadislan then
+							for i,v in pairs(workspace.Areas:GetChildren()) do wait()
+								Tp(v.CFrame * CFrame.new(0,255,0))
+							end
+							loadislan = true
+						end
+						if (not workspace.Monster.Mon:FindFirstChild(QuestInfo['Monster']) or not workspace.Monster.Boss:FindFirstChild(QuestInfo['Monster'])) then
+							for _, npc in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+								if npc and npc.Name == QuestInfo['Monster'] and npc:FindFirstChild("HumanoidRootPart") then
+									Tp(npc:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,6,0))
+								end
+							end
+						end
+						if not f.CheckMon(QuestInfo['Monster']) then
+							Tp(QuestInfo['CFrame'] * CFrame.new( 0, 300, 0))
+						end
+						for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible
+							end
+						end
+						for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible	
+							end
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Dead Above' and not f.CheckDailyQuest('Dead Above') then 
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Floating Feather") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						getQuestOld(workspace.AllNPC["Daily Quest DeadAbove"].CFrame)
+						mouse1click()
+					else
+						for i,v in pairs(workspace.SpawnItem:GetChildren()) do
+							if v.Name == "Floating Feather" then
+								Tp(v.CFrame)
+								wait(.2)
+								fireproximityprompt(v.ProximityPrompt, 1000) wait(1)
+							end
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Daily Quest [Lv. 3800]' and not f.CheckDailyQuest('The Lost Book') then 
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Ancient Book") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						getQuestOld(workspace.AllNPC["Daily QuestLvl3800"].CFrame)
+						mouse1click()
+					else
+						Tp(workspace.Island["H - Fiore"]["Lost Book"].Main.CFrame)
+						fireproximityprompt(workspace.Island["H - Fiore"]["Lost Book"].Main.ProximityPrompt, 1000) wait(1)
+					end
+				elseif Configs['Select Daily Quest'] == 'Lore Sea Madness' and not f.CheckDailyQuest('Catch me,If you can') then 
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("His treasure or my precious") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Lore Sea Madness"].CFrame) wait(1)
+					else
+						Tp(workspace.SpawnItem["Catch me,If you can"].CFrame)
+						wait(.2)
+						fireproximityprompt(workspace.SpawnItem["Catch me,If you can"].PromptQuest, 1000) wait(1)
+					end
+				elseif Configs['Select Daily Quest'] == 'Lore Sea Sick!' and not f.CheckDailyQuest("I'm not,YOU ARE!") then 
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Walk to Objective!") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Lore Sea Sick!"].CFrame) wait(1)
+					else
+						for i,v in pairs(workspace.SpawnItem:GetChildren()) do
+							if v.Name == "I'm not,YOU ARE!" then
+								Tp(v.CFrame)
+								wait(.2)
+							end
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Lore Sea Diving' and not f.CheckDailyQuest('Under The Sea~') then 
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Just Dive?") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Lore Sea Diving"].CFrame) wait(1)
+					else
+						for i,v in pairs(workspace.SpawnItem:GetChildren()) do
+							if v.Name == "Under The Sea~" then
+								Tp(v.CFrame)
+								wait(.2)
+							end
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Lore Sea Creature' and not f.CheckDailyQuest('Left to Dead') then 
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Dead Troupe Captain") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Lore Sea Creature"].CFrame) wait(1)
+					else
+						local QuestInfo = {
+							['Monster'] = 'Dead Troupe Captain [Lv. 3850]',
+							['CFrame'] = CFrame.new(10241.1758, 91.3259811, -4254.53027, 0.358377755, -0, -0.933576643, 0, 1, -0, 0.933576643, 0, 0.358377755)
+						}
+						if workspace:FindFirstChild('Areas') and not loadislan then
+							for i,v in pairs(workspace.Areas:GetChildren()) do wait()
+								Tp(v.CFrame * CFrame.new(0,255,0))
+							end
+							loadislan = true
+						end
+						if (not workspace.Monster.Mon:FindFirstChild(QuestInfo['Monster']) or not workspace.Monster.Boss:FindFirstChild(QuestInfo['Monster'])) then
+							for _, npc in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+								if npc and npc.Name == QuestInfo['Monster'] and npc:FindFirstChild("HumanoidRootPart") then
+									Tp(npc:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,6,0))
+								end
+							end
+						end
+						if not f.CheckMon(QuestInfo['Monster']) then
+							Tp(QuestInfo['CFrame'] * CFrame.new( 0, 300, 0))
+						end
+						for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible
+							end
+						end
+						for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible	
+							end
+						end
+					end
+				end
+			elseif Sea == 3 then
+				if Configs['Select Daily Quest'] == 'Lore Puzzle First' and not f.CheckDailyQuest('Puzzle Mania') then 
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Solve Sea's Puzzle") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Lore Puzzle First"].CFrame)
+						mouse1click()
+					else
+						for i, v in pairs(workspace.SpawnItem.Puzzle_Easy:GetChildren()) do
+							if v.Name == "Plate" and v:FindFirstChild("ProximityPrompt") and v.ProximityPrompt.Enabled then
+								local rotation = v.Rotation
+								if rotation == Vector3.new(0, -58.484, 0) then
+									v.Name = 'Plate3'
+								elseif rotation == Vector3.new(180, 1.454, 180) then
+									v.Name = 'Plate2'
+								elseif rotation == Vector3.new(180, 53.675, 180) then
+									v.Name = 'Plate1'
+								end
+							end
+						end
+						for i, v in pairs(workspace.SpawnItem.Puzzle_Easy:GetChildren()) do
+							if LocalPlayer.Character:FindFirstChild('onQuest') then
+								if v.Name == "Plate1" and PostmessageNames == "Message1" and v:FindFirstChild("ProximityPrompt") and v.ProximityPrompt.Enabled then
+									Tp(v.CFrame)
+									for pp = 1,3 do wait(1)
+										fireproximityprompt(v.ProximityPrompt, math.huge)
+									end
+								elseif v.Name == "Plate2" and PostmessageNames == "Message2" and v:FindFirstChild("ProximityPrompt") and v.ProximityPrompt.Enabled then
+									Tp(v.CFrame)
+									for pp = 1,3 do wait(1)
+										fireproximityprompt(v.ProximityPrompt, math.huge)
+									end
+								elseif v.Name == "Plate3" and PostmessageNames == "Message3" and v:FindFirstChild("ProximityPrompt") and v.ProximityPrompt.Enabled then
+									Tp(v.CFrame)
+									for pp = 1,3 do wait(1)
+										fireproximityprompt(v.ProximityPrompt, math.huge)
+									end
+									PostmessageNames = 'Noen' 
+								end
+							else
+								if LocalPlayer.Character:FindFirstChild('onQuest') then return end
+								if v.Name == "Message1" and PostmessageNames == 'Noen' and v:FindFirstChild("BillboardGui") and v.BillboardGui.Enabled then
+									PostmessageNames = "Message1"
+									Tp(v.CFrame)
+									for pp = 1,3 do wait(1)
+										fireproximityprompt(v.ProximityPrompt, math.huge)
+									end
+								elseif v.Name == "Message2" and PostmessageNames == 'Message1' and v:FindFirstChild("BillboardGui") and v.BillboardGui.Enabled then
+									PostmessageNames = "Message2"
+									Tp(v.CFrame)
+									for pp = 1,3 do wait(1)
+										fireproximityprompt(v.ProximityPrompt, math.huge)
+									end
+								elseif v.Name == "Message3" and PostmessageNames == 'Message2' and v:FindFirstChild("BillboardGui") and v.BillboardGui.Enabled then
+									PostmessageNames = "Message3"
+									Tp(v.CFrame)
+									for pp = 1,3 do wait(1)
+										fireproximityprompt(v.ProximityPrompt, math.huge)
+									end
+								end
+							end
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Lore Lost Fugitive' and not f.CheckDailyQuest('Redemption') then 
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Fugitive") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Lore Lost Fugitive"].CFrame) wait(1)
+					else
+						local QuestInfo = {
+							['Monster'] = 'Fugitive [Lv. 4050]',
+							['CFrame'] = CFrame.new(2838.67139, 35.9668121, 1114.66064, 0.585472524, 0, 0.810692251, 0, 1, 0, -0.810692251, 0, 0.585472524)
+						}
+						if workspace:FindFirstChild('Areas') and not loadislan then
+							for i,v in pairs(workspace.Areas:GetChildren()) do wait()
+								Tp(v.CFrame * CFrame.new(0,255,0))
+							end
+							loadislan = true
+						end
+						local Tool
+						if (not workspace.Monster.Mon:FindFirstChild(QuestInfo['Monster']) or not workspace.Monster.Boss:FindFirstChild(QuestInfo['Monster'])) then
+							for _, npc in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+								if npc and npc.Name == QuestInfo['Monster'] and npc:FindFirstChild("HumanoidRootPart") then
+									Tp(npc:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,6,0))
+								end
+							end
+						end
+						if not f.CheckMon(QuestInfo['Monster']) then
+							Tp(QuestInfo['CFrame'] * CFrame.new( 0, 300, 0))
+						end
+						for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible
+							end
+						end
+						for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible	
+							end
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Lore Kraken Codex Easy' and not f.CheckDailyQuest('Krakenci Codes (Easy)') then
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Solving Kraken's Codex") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Lore Lost Fugitive"].CFrame)
+						mouse1click()
+					else
+						Tp(workspace.AllNPC["Lore Kraken Codex Easy"].CFrame)
+						mouse1click()
+						local args = {
+							[1] = {
+								["Quest"] = "Krakenci Codes",
+								["Gui"] = "PuzzleLibs"
+							}
+						}
+						game:GetService("Players").LocalPlayer.PlayerGui.LoreGUI.LOREGUI_REMOTE:InvokeServer(unpack(args))
+						task.wait(1)
+						for i = 1, 50 do
+							local args = {
+								[1] = "Submit",
+								[2] = {}
+							}
+
+							local selectedWords = {}
+
+							while #selectedWords < 3 do
+								local randomWord = Puzzle[math.random(1, #Puzzle)]
+								if not table.find(selectedWords, randomWord) then
+									table.insert(selectedWords, randomWord)
+								end
+							end
+
+							for _, word in ipairs(selectedWords) do
+								table.insert(args[2], word)
+							end
+
+							game:GetService("Players").LocalPlayer.PlayerGui.LeePungg_PuzzleLibs.PuzzleRemote:InvokeServer(unpack(args))
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Lore Into the Bubble-Verse' and not f.CheckDailyQuest('Into the Bubble-Verse') then
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Cyborg Gorilla") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Lore Into the Bubble-Verse"].CFrame)
+						mouse1click()
+					else
+						local QuestInfo = {
+							['Monster'] = 'Cyborg Gorilla [Lv. 4375]',
+							['CFrame'] = CFrame.new(5789.04199, 43.2812691, 9350.66895, 0.98578757, -0.000263640919, -0.167996362, 0.0033488262, 0.999831021, 0.018081557, 0.167963162, -0.0183871649, 0.98562187)
+						}
+						if workspace:FindFirstChild('Areas') and not loadislan then
+							for i,v in pairs(workspace.Areas:GetChildren()) do wait()
+								Tp(v.CFrame * CFrame.new(0,255,0))
+							end
+							loadislan = true
+						end
+
+						if (not workspace.Monster.Mon:FindFirstChild(QuestInfo['Monster']) or not workspace.Monster.Boss:FindFirstChild(QuestInfo['Monster'])) then
+							for _, npc in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+								if npc and npc.Name == QuestInfo['Monster'] and npc:FindFirstChild("HumanoidRootPart") then
+									Tp(npc:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,6,0))
+								end
+							end
+						end
+						if not f.CheckMon(QuestInfo['Monster']) then
+							Tp(QuestInfo['CFrame'] * CFrame.new( 0, 300, 0))
+						end
+						for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible
+							end
+						end
+						for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible	
+							end
+						end
+					end
+				elseif Configs['Select Daily Quest'] == 'Lore Kraken Codex Hard' and not f.CheckDailyQuest('Krakenci Codes (Hard)') then
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Solving Kraken's Codex") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Lore Kraken Codex Hard"].CFrame)
+						mouse1click()
+					else
+						Tp(workspace.AllNPC["Lore Kraken Codex Giver"].CFrame)
+						mouse1click()
+						local args = {
+							[1] = {
+								["Quest"] = "Krakenci Codes",
+								["Gui"] = "PuzzleLibs"
+							}
+						}
+						game:GetService("Players").LocalPlayer.PlayerGui.LoreGUI.LOREGUI_REMOTE:InvokeServer(unpack(args))
+						task.wait(1)
+						for i = 1, 100 do
+							local args = {
+								[1] = "Submit",
+								[2] = {}
+							}
+
+							local selectedWords = {}
+
+							while #selectedWords < 3 do
+								local randomWord = Puzzle[math.random(1, #Puzzle)]
+								if not table.find(selectedWords, randomWord) then
+									table.insert(selectedWords, randomWord)
+								end
+							end
+
+							for _, word in ipairs(selectedWords) do
+								table.insert(args[2], word)
+							end
+
+							game:GetService("Players").LocalPlayer.PlayerGui.LeePungg_PuzzleLibs.PuzzleRemote:InvokeServer(unpack(args))
+						end
+					end
+				elseif  Configs['Select Daily Quest'] == 'Lore The Pillar' and not f.CheckDailyQuest('The Pillar') then 
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Investigate Stranded Pillar?") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Lore The Pillar"].CFrame)
+						mouse1click()
+					else
+						Tp(workspace.SpawnItem["The Pillar"].CFrame)
+						fireproximityprompt(workspace.SpawnItem["The Pillar"].PromptQuest, math.huge)
+					end
+				elseif Configs['Select Daily Quest'] == 'Lore the Depth' and not f.CheckDailyQuest('Rolling in the Depth') then
+					if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible == true then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.btpexp.Visible == false then
+							CloseQuest()
+						end
+						if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.QuestCount.Text:find("Deep Diver") then
+							CloseQuest()
+						end
+					end
+					if not game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+						if game:GetService("Players").LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							return
+						end
+						getQuestOld(workspace.AllNPC["Lore the Depth"].CFrame)
+						mouse1click()
+					else
+						local QuestInfo = {
+							['Monster'] = 'Deep Diver [Lv. 4000]',
+							['CFrame'] = workspace.LeeQuestTracker.CFrame
+						}
+						if workspace:FindFirstChild('Areas') and not loadislan then
+							for i,v in pairs(workspace.Areas:GetChildren()) do wait()
+								Tp(v.CFrame * CFrame.new(0,255,0))
+							end
+							loadislan = true
+						end
+						local Tool
+
+						if (not workspace.Monster.Mon:FindFirstChild(QuestInfo['Monster']) or not workspace.Monster.Boss:FindFirstChild(QuestInfo['Monster'])) then
+							for _, npc in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+								if npc and npc.Name == QuestInfo['Monster'] and npc:FindFirstChild("HumanoidRootPart") then
+									Tp(npc:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,6,0))
+								end
+							end
+						end
+						if not f.CheckMon(QuestInfo['Monster']) then
+							Tp(QuestInfo['CFrame'] * CFrame.new( 0, 300, 0))
+						end
+						for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible
+							end
+						end
+						for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+							if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until not Configs['AutoDailyQuest'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible	
+							end
+						end
+					end
+				end
+			end
+		end
+	end)
+end)
+-- game:GetService("ReplicatedStorage"):WaitForChild("GoldenArenaEvents"):WaitForChild("StartEvent"):FireServer()
+
+f.AutoClearDungeon = function()
+	while Configs["AutoClearDungeon"] and task.wait() do
+
+		local SafePercent = LocalPlayer.Character:FindFirstChild('Humanoid').MaxHealth *  (20/100)
+		local HealthToClearAgain = LocalPlayer.Character:FindFirstChild('Humanoid').MaxHealth * (50/100)
+		local MyHealth = LocalPlayer.Character:FindFirstChild('Humanoid').Health
+
+		Character = LocalPlayer and LocalPlayer:FindFirstChild("Character")
+		if game.PlaceId ~= 5931540094 then
+			Tp(CFrame.new(-4593.1005859375, 223.4420166015625, -73.16742706298828), true)
+			continue
+		end
+		
+		task.desynchronize(function() -- รันโดยไม่ขัดกับลูปหลัก
+			if LocalPlayer.PlayerGui:FindFirstChild('ChooseMap') and LocalPlayer.PlayerGui:FindFirstChild('ChooseMap').Enabled  then
+				game:GetService("ReplicatedStorage"):WaitForChild("ChooseMapRemote"):FireServer(Configs["Choose Difficulty"] or "Normal")
+			end
+			if game:GetService("Players").LocalPlayer.PlayerGui["GoldenArena GUI"].StartButton.Visible then
+				game:GetService("ReplicatedStorage"):WaitForChild("GoldenArenaEvents"):WaitForChild("StartEvent"):FireServer()
+			end
+		end)
+
+		if MyHealth <= SafePercent then
+			repeat
+				SafePercent = LocalPlayer.Character:FindFirstChild('Humanoid').MaxHealth * (20/100)
+				MyHealth = LocalPlayer.Character:FindFirstChild('Humanoid').Health
+				Tp(CFrame.new(-5, 21, 89)*CFrame.new(0,1500,0))
+				task.wait()
+			until MyHealth >= HealthToClearAgain
+		else
+			for i,v in pairs(workspace.MOB:GetChildren()) do
+				if v and v.Parent and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health >0 then
+					repeat
+						SafePercent = LocalPlayer.Character:FindFirstChild('Humanoid').MaxHealth *(20/100)
+						MyHealth = LocalPlayer.Character:FindFirstChild('Humanoid').Health
+						task.wait()
+						Tp(v.HumanoidRootPart.CFrame * CFrame.new(0,7.5,-1) * CFrame.Angles(math.rad(-90),0,0))
+						f.useSkill()
+					until not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0  or MyHealth <= SafePercent
+				end
+			end
+		end
+	end
+end
+
+
+
+local count = {}
+
+f.getMarterBoss = function()
+	local listBoss = {}
+	for i,v in pairs(require(game:GetService("ReplicatedStorage").Chest.Modules.RaidBossList)) do
+		if f.CheckMon(i) then
+			table.insert(listBoss, i)
+		end
+	end
+	for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+		if v:IsA('Model') then
+			table.insert(listBoss, v.Name)
+		end
+	end
+	for i, v in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+		if v:IsA('Model') then
+			local name = v.Name
+			if not count[name] then
+				count[name] = 0
+			end
+			count[name] = count[name] + 1
+		end
+	end
+	local exists = false
+	for i, v in pairs(count) do
+		if v == 1 then
+			for _, boss in ipairs(listBoss) do
+				if boss == i then
+					exists = true
+					break
+				end
+			end
+			if not exists then
+				table.insert(listBoss, i)
+			end
+		end
+	end
+	return listBoss
+end
+
+
+local FoundSwordTable = {
+	["Smoky [Lv. 20]"] = {
+		"Jitter",
+		1,
+		CFrame.new(-2105.688232421875, 45.96751403808594, -4696.6982421875),
+		false
+	},
+	["Tashi [Lv. 30]"] = {
+		"Tashi Blade",
+		1,
+		CFrame.new(-2359.87158203125, 46.43350601196289, -4484.57373046875),
+		false
+	},
+	["Shark Man [Lv. 230]"] = {
+		"Shark Blade",
+		1,
+		CFrame.new(-699.1792602539062, 52.90019226074219, -1513.255126953125),
+		false
+	},
+	["Rumble Man [Lv. 950]"] = {
+		"Pole",
+		1,
+		CFrame.new(-4251.19873046875, 399.7054748535156, 1477.7158203125),
+		false
+	},
+	["Quake Woman [Lv. 1925]"] = {
+		"Bisento",
+		1,
+		CFrame.new(2270.761962890625, 3.984257698059082, -1917.241943359375),
+		false
+	},
+	["Expert Swordman [Lv. 3000]"] = {
+		"Saber",
+		1,
+		CFrame.new(5550.357421875, 60.101497650146484, -6435.65185546875),
+		false
+	},
+	["Anubis [Lv. 3150]"] = {
+		"Anubis Axe",
+		2,
+		CFrame.new(1964.528564453125, 44.30209732055664, 900.0299072265625),
+		false
+	},
+	["Flame User [Lv. 3200]"] = {
+		"Adventure Knife",
+		2,
+		CFrame.new(1985.357177734375, 31.63482666015625, 1371.6107177734375),
+		false
+	},
+	["Sunken Vessel [Lv. 3225]"] = {
+		"Sunken Blade",
+		2,
+		CFrame.new(-1073.7579345703125, 47.42523956298828, 8251.6220703125),
+		false
+	},
+	["Biscuit Man [Lv. 3250]"] = {
+		"Cookie Sword",
+		2,
+		CFrame.new(-1506.2154541015625, 209.41180419921875, 8996.857421875),
+		false
+	},
+	["Dough Master [Lv. 3275]"] = {
+		"Metal Trident",
+		2,
+		CFrame.new(30266.77734375, 61.9922981262207, 93208.203125),
+		false
+	},
+
+	["Shadow Master [Lv. 1650]"] = {
+		"Mom Blade [ Legendary ]",
+		1,
+		CFrame.new(-2750.928466796875, 35.688018798828125, 4111.703125),
+		true
+	}
+}
+
+function GetDataSword(NameSword)
+	for BossName,_ in pairs(FoundSwordTable) do
+		if _[1] == NameSword then
+			return {
+				["Boss"] = BossName,
+				["Sea"] = _[2],
+				["Spawn Position"] = _[3],
+				["Hard Working"] = _[4]
+			}
+		end
+	end
+
+	return false
+end
+
+function ReadyHaveInChar(Nameitem)
+	for _, v in ipairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+		if v.Name == Nameitem then
+			return true
+		end
+	end
+	for _, v in ipairs(game.Players.LocalPlayer.Character:GetChildren()) do
+		if v.Name == Nameitem then
+			return true
+		end
+	end
+	
+	return false
+end
+
+
+f.autofoundsword = task.spawn(function() -- Hark Working
+	while task.wait() do
+		if Configs["Auto Found Sword Toggle"] ~= true and Configs["ChooseWeapon"] ~= (nil or "")  then
+			continue
+		end
+		
+		if not ReadyHave(Configs["ChooseWeapon"])  then
+			local DataSword = GetDataSword(Configs["ChooseWeapon"])
+
+			if Sea ~= DataSword['Sea'] then
+				if DataSword['Sea'] == 1 then
+					Library:Notify("Boss `"..DataSword["Boss"].."` live In Sea 1 Starting Teleport")
+					Library:Notify("Teleport To Sea 1")
+					repeat
+						getQuestOld(CFrame.new(-3337, 17, 252))
+						wait()
+					until game.JobId ~= game.JobId or not Configs["Auto Found Sword Toggle"]
+					continue
+				elseif DataSword['Sea'] == 2 then
+					Library:Notify("Boss `"..DataSword["Boss"].."` live In Sea 2 Starting Teleport")
+					Library:Notify("Teleport To Sea 2")
+					repeat
+						getQuestOld(CFrame.new(-2162, 18, -3990))
+						wait()
+					until game.JobId ~= game.JobId or not Configs["Auto Found Sword Toggle"]
+					continue
+				end
+			end
+			
+			
+			local Monster = DataSword['Boss']
+			local RealBoss = ""
+			
+			if (not f.CheckMon(Monster)) then
+				Tp(DataSword['Spawn Position'], true)
+			end 
+			
+			if DataSword['Hard Working'] then
+				if Configs["ChooseWeapon"] == 'Mom Blade [ Legendary ]' then		
+					
+					if getPlayerMaterial("Twilight's Orb") > 0 then
+						Tp(CFrame.new(-2947.429931640625, 19.286521911621094, 4448.27978515625), true)
+						ReplicatedStorage:WaitForChild("Chest"):WaitForChild("Remotes"):WaitForChild("Functions"):WaitForChild("CheckQuest"):InvokeServer(workspace:WaitForChild("AllNPC"):WaitForChild("SummonOrcLord"))
+						for i = 1,10 do
+							game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
+							game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
+						end
+						wait(.5)
+						for index, value in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetDescendants()) do
+							if value.Name == 'Dialogue' and value:FindFirstChild('Accept') then
+								value.Accept.Size,value.Accept.Text.TextTransparency = UDim2.new(1001, 0, 1001, 0), 1
+								value.Accept.Position, value.Accept.AnchorPoint = UDim2.new(.5, 0, .5, 0), Vector2.new(0.5, 0.5)
+							elseif value.Name == 'Dialogue' and value:FindFirstChild('QuestAccept') then
+								value['Quest 1'].Size,value['Quest 1'].Text.TextTransparency = UDim2.new(1001, 0, 1001, 0), 1
+								value['Quest 1'].Position, value['Quest 1'].AnchorPoint = UDim2.new(.5, 0, .5, 0), Vector2.new(0.5, 0.5)
+								game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
+								game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
+								value['QuestAccept'].Size,value['QuestAccept'].Text.TextTransparency = UDim2.new(1001, 0, 1001, 0), 1
+								value['QuestAccept'].Position, value['QuestAccept'].AnchorPoint = UDim2.new(.5, 0, .5, 0), Vector2.new(0.5, 0.5)
+							end
+						end
+						wait(.2)
+						for i = 1,10 do wait()
+							game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
+							game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
+						end
+						continue
+					end
+					
+					RealBoss = "Monster [Lv. 2500]"
+					for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+						if v and ( v.Name == RealBoss or v.Name == Monster) and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+							repeat task.wait()
+								getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+								Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+								f.useSkill()
+							until not Configs["Auto Found Sword Toggle"] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or ReadyHave(Configs["ChooseWeapon"])	or ReadyHaveInChar("twilight orb")
+						else
+							if not workspace.Monster.Boss:FindFirstChild(Monster) then
+								Tp(DataSword['Spawn Position'], true)
+							end
+						end
+					end
+					
+				end
+				continue
+			end
+			for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+				if v and v.Name == Monster and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+					repeat task.wait()
+						getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+						Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+						f.useSkill()
+					until not Configs["Auto Found Sword Toggle"] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or ReadyHave(Configs["ChooseWeapon"])	
+				else
+					if not workspace.Monster.Boss:FindFirstChild(Monster) then
+						Tp(DataSword['Spawn Position'], true)
+					end
+				end
+				
+			end
+		else
+			Library:Notify("You Have Sword "..Configs["ChooseWeapon"], 5)
+			Library:Notify("Change Toggle `Auto Found Sword` Success", 3)
+			Configs["Auto Found Sword Toggle"] = false
+			ClearClip()
+		end
+	end
+end)
+
+f.SeaKing = task.spawn(function()
+	while task.wait() do
+		if Configs['Auto Sea Event'] then
+			if Configs['ChooseMonSea'] == "Sea King" then
+				pcall(function()
+
+					if not game:GetService("Workspace").SeaMonster:FindFirstChild("SeaKing") then
+						for indx = 1, 4 do
+							local IslandName = "Legacy Island"..indx
+							local Island = game:GetService("Workspace").Island:FindFirstChild(IslandName)
+							repeat
+								if Island then
+									Tp(game:GetService("Workspace").Island:FindFirstChild(IslandName).ChestSpawner.CFrame * CFrame.new(0,0,2), true)
+								end
+							until not Configs['Auto Sea King'] or not island
+						end
+					end
+
+					if game:GetService("Workspace").SeaMonster:FindFirstChild("SeaKing") then
+						for i,v in pairs(game:GetService("Workspace").SeaMonster:GetChildren()) do
+							if v.Name == "SeaKing" and v.Humanoid.Health > 0 then
+								repeat task.wait()
+									getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+									Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+									f.useSkill()
+								until v.Humanoid.Health <= 0 or not Configs['Auto Sea King']
+							end
+						end
+					end
+					if Configs['Auto Sea Event Hop'] and not game:GetService("Workspace").Island:FindFirstChild("Legacy Island1") and not game:GetService("Workspace").Island:FindFirstChild("Legacy Island2") and not game:GetService("Workspace").Island:FindFirstChild("Legacy Island3") and not game:GetService("Workspace").Island:FindFirstChild("Legacy Island4") and not game:GetService("Workspace").SeaMonster:FindFirstChild("SeaKing") then
+						wait(3)
+						HopServer(true)
+					end
+				end)
+			end
+		end
+	end
+end)
+
+
+f.nextSea = task.spawn(function()
+	s, e = pcall(function()
+		while task.wait() do
+			if Configs['AutoNextSea'] ~= true then
+				continue
+			end
+			if Sea == 1 and LocalPlayer.PlayerStats.lvl.Value >= 2250 and (LocalPlayer.PlayerStats.lvl.Value < 4000 and (getPlayerMaterial("Fresh Fish") > 50 or getPlayerMaterial("Angellic's Feather") > 14))  then
+				if Configs.autofarm then
+					Configs.autofarm = false
+				end
+				if LocalPlayer.PlayerStats.SecondSeaProgression.Value == "Yes" then
+					getQuestOld(workspace.AllNPC["Elite Pirate"].CFrame) wait(.5) Tp(workspace.AllNPC["Elite Pirate"].CFrame * CFrame.new( 0, 0, -10))
+				else
+					if getPlayerMaterial('Map') > 0 then
+						getQuestOld(workspace.AllNPC.Traveler.CFrame) wait(.5) Tp(workspace.AllNPC.Traveler.CFrame * CFrame.new( 0, 0, -10))
+					else
+						if not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible then
+							getQuestOld(workspace.AllNPC.Traveler.CFrame) wait(.5) Tp(workspace.AllNPC.Traveler.CFrame * CFrame.new( 0, 0, -10))
+						else
+							local QuestInfo = {
+								['Monster'] = 'Seasoned Fishman [Lv. 2200]',
+								['CFrame'] = CFrame.new(-1865.43481, 45.2696266, 6722.8501, 0.965929627, -0, -0.258804798, 0, 1, -0, 0.258804798, 0, 0.965929627)
+							}
+							if workspace:FindFirstChild('Areas') and not loadislan then
+								for i,v in pairs(workspace.Areas:GetChildren()) do wait()
+									Tp(v.CFrame * CFrame.new(0,255,0))
+								end
+								loadislan = true
+							end
+							if (not workspace.Monster.Mon:FindFirstChild(QuestInfo['Monster']) or not workspace.Monster.Boss:FindFirstChild(QuestInfo['Monster'])) then
+								for _, npc in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+									if npc and npc.Name == QuestInfo['Monster'] and npc:FindFirstChild("HumanoidRootPart") then
+										Tp(npc:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,6,0))
+									end
+								end
+							end
+							if not f.CheckMon(QuestInfo['Monster']) then
+								Tp(QuestInfo['CFrame'] * CFrame.new( 0, 300, 0))
+							end
+							for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+								if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+									repeat task.wait()
+										getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+										Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+										f.useSkill()
+									until not Configs['AutoNextSea'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible
+								end
+							end
+							for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+								if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+									repeat task.wait()
+										getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+										Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+										f.useSkill()
+									until not Configs['AutoNextSea'] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible	
+								end
+							end
+						end
+					end
+				end
+			elseif LocalPlayer.PlayerStats.lvl.Value >= 4000 and ( Sea == 1 and (getPlayerMaterial("Fresh Fish") < 50 or getPlayerMaterial("Angellic's Feather") < 14)) then
+				if getPlayerMaterial("Kraken's Cache") > 0 then
+					getQuestOld(workspace.AllNPC:FindFirstChild("The Squid").CFrame) wait(.5)
+					Tp(workspace.AllNPC:FindFirstChild("The Squid").CFrame * CFrame.new( 0, 10, -10))
+				else
+					if f.findEnemies({"Tentacle"}) then
+						f.attackMonter({
+							"Tentacle",
+						}, 'nextSea')
+					else
+						if getPlayerMaterial("Heart of Sea") > 0 then
+							if LocalPlayer.PlayerGui:FindFirstChild("MaterialCraftingUI") then
+								LocalPlayer.PlayerGui:FindFirstChild("MaterialCraftingUI"):Destroy()
+								LocalPlayer.Character.Humanoid:ChangeState(15)
+							end
+							getQuestOld(workspace.AllNPC:FindFirstChild("Summon Tentacle").CFrame)
+						else
+							if not f.findEnemies({"Tentacle"}) then
+								local NeedMateria = {
+									['Log'] = 50,
+									['Pile of Bones'] = 10,
+									["Sea King's Blood"] = 1,
+									["Fresh Fish"] = 50,
+									["Angellic's Feather"] = 14
+								}
+								if getPlayerMaterial("Log") < NeedMateria['Log']  then
+									if Sea ~= 2 then
+										getQuestOld(CFrame.new(-2407.80908, 16.2715569, -4360.92676, 0.596248031, -9.03673936e-07, -0.802800298, -0.000309376366, 0.99999994, -0.00023090269, 0.802800179, 0.000386042695, 0.596248031), "Elite")
+										return
+									end
+									for _i, _v in pairs(game:GetService("Workspace"):GetDescendants()) do
+										if string.find(_v.Name, "Tree") and _v:FindFirstChild("Part") and _v.Part.Transparency == 0 then task.wait(1.5)
+											if Configs['AutoNextSea'] or getPlayerMaterial("Log") <= NeedMateria['Log'] or not f.findEnemies({"Tentacle"}) then
+												local Tree = _v:GetModelCFrame()
+												Tp(Tree)
+												if not LocalPlayer.Backpack:FindFirstChild('Bisento') and not LocalPlayer.Character:FindFirstChild('Bisento') then
+													local args = {
+														[1] = "Bisento"
+													}
+
+													game:GetService("ReplicatedStorage"):WaitForChild("Chest"):WaitForChild("Remotes"):WaitForChild("Functions"):WaitForChild("InventoryEq"):InvokeServer(unpack(args))
+												end
+												EquipTools("Bisento")
+												game:service('VirtualInputManager'):SendKeyEvent(true, "Z", false, game)
+												game:service('VirtualInputManager'):SendKeyEvent(false, "Z", false, game)
+												game:service('VirtualInputManager'):SendKeyEvent(true, "X", false, game)
+												game:service('VirtualInputManager'):SendKeyEvent(false, "X", false, game)
+											end
+										end
+										if not  Configs['AutoNextSea']  or getPlayerMaterial("Log") >= NeedMateria['Log'] or f.findEnemies({"Tentacle"}) then
+											break
+										end
+									end
+								elseif getPlayerMaterial("Pile of Bones") < NeedMateria['Pile of Bones'] then
+									if Sea ~= 2 then
+										getQuestOld(CFrame.new(-2407.80908, 16.2715569, -4360.92676, 0.596248031, -9.03673936e-07, -0.802800298, -0.000309376366, 0.99999994, -0.00023090269, 0.802800179, 0.000386042695, 0.596248031))
+									else
+										if f.findEnemies({"Skull Pirate [Lv. 3050]"}) then
+											f.attackMonter({
+												"Skull Pirate [Lv. 3050]",
+											},  'nextSea')
+										else
+											Tp(_getCFrameNpcQuest(3050)['CFrame'] * CFrame.new(math.random(-300,300), math.random(0,100),math.random(-300,300)))
+										end
+									end
+								elseif getPlayerMaterial("Fresh Fish") < NeedMateria['Fresh Fish'] then
+									if Sea ~= 1 then
+										getQuestOld(CFrame.new(-3336.48364, 16.8549156, 253.276154, 0.0275194645, 0.000249172153, 0.999621212, -0.00036955846, 0.999999881, -0.000239092653, -0.999621212, -0.000362838764, 0.0275195837), "Elite")
+									else
+										if  f.findEnemies({"Karate Fishman [Lv. 200]","Fighter Fishman [Lv. 180]","Shark Man [Lv. 230]"}) then
+											f.attackMonter({
+												"Karate Fishman [Lv. 200]",
+												"Fighter Fishman [Lv. 180]",
+												"Shark Man [Lv. 230]",
+											}, 'nextSea')
+										else
+											Tp(game:GetService("Workspace").AllNPC:FindFirstChild("Shark Island Quest").CFrame * CFrame.new(math.random(-300,300), math.random(0,100),math.random(-300,300) ) )
+										end
+									end
+								elseif getPlayerMaterial("Angellic's Feather") < NeedMateria["Angellic's Feather"] then
+									if Sea ~= 1 then
+										getQuestOld(CFrame.new(-3336.48364, 16.8549156, 253.276154, 0.0275194645, 0.000249172153, 0.999621212, -0.00036955846, 0.999999881, -0.000239092653, -0.999621212, -0.000362838764, 0.0275195837), "Elite")
+									else
+										if f.findEnemies({"Sky Soldier [Lv. 800]", "Ball Man [Lv. 850]"}) then
+											f.attackMonter({
+												"Sky Soldier [Lv. 800]",
+												"Ball Man [Lv. 850]"
+											}, 'nextSea')
+										else
+											Tp(game:GetService("Workspace").AllNPC:FindFirstChild("Skyland Quest").CFrame * CFrame.new(math.random(-300,300), math.random(0,100),math.random(-300,300)))
+										end
+									end
+									
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end)
+	if not s then
+		warn('nextSea : ', e)
+	end
+end)
+
+
+f.CheckMon = function(monName)
+	local findMon = false
+	for __, checkmon in pairs(workspace.Monster.Mon:GetChildren()) do
+		if checkmon.Name == monName and checkmon:FindFirstChild("Humanoid") and checkmon:FindFirstChild("HumanoidRootPart") and checkmon.Humanoid.Health > 0 then
+			findMon = true
+		end
+	end
+	for __, checkmon in pairs(workspace.Monster.Boss:GetChildren()) do
+		if checkmon.Name == monName and checkmon:FindFirstChild("Humanoid") and checkmon:FindFirstChild("HumanoidRootPart") and checkmon.Humanoid.Health > 0 then
+			findMon = true
+		end
+	end
+	for __, checkmon in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+		if checkmon.Name == monName and checkmon:FindFirstChild("Humanoid") and checkmon:FindFirstChild("HumanoidRootPart") and checkmon.Humanoid.Health > 0 then
+			findMon = true
+		end
+	end
+	return findMon
+end
+
+local SetFpsCap = newcclosure(function(bruh)
+	local SetTo = bruh or 0
+	if SetTo == 0 then SetTo = SetTo > 0 and 1.0 / SetTo or 1.0 / 10000.0 end
+	setfflag("TaskSchedulerTargetFps", tostring(SetTo))
+end);
+
+f.Unlock = spawn(function() 
+	while RunService.Heartbeat:Wait() do
+		pcall(function()
+			if Configs['Activate Buso'] then
+				LocalPlayer.PlayerStats.BusoShopValue.Value = 'BusoHaki'
+			end
+			if Configs['Activate Ken'] then
+				LocalPlayer.PlayerStats.KenShopValue.Value = 'KenHaki'
+			end
+			if Configs['Auto Observation Haki'] then
+				ac.Ken()
+			end
+			if Configs['Unlock Fps'] then
+				SetFpsCap(240)
+			else
+				SetFpsCap(90)
+			end
+
+			if Configs['Walk On Water'] and workspace:FindFirstChild('watermove') and workspace:FindFirstChild('watermove'):FindFirstChild('Sea') then
+				workspace:FindFirstChild('watermove'):FindFirstChild('Sea').CanCollide = Configs['Walk On Water']
+			end
+
+			if Configs["Spectate Player"] and Configs["Select Player Dropdown"] then
+				workspace.CurrentCamera.CameraSubject = game.Players:FindFirstChild(Configs["Select Player Dropdown"]).Character
+			else
+				workspace.CurrentCamera.CameraSubject = LocalPlayer.Character
+			end
+
+			if Configs['Noclip Toggle'] then
+				for _, v in pairs(LocalPlayer.Character:GetDescendants()) do
+					if v:IsA("BasePart") then
+						v.CanCollide = false    
+					end
+				end
+			end
+
+			if Configs['Romove Fog'] then
+				game:GetService("Lighting").FogEnd = math.huge
+			end
+
+			if Configs['Day Only'] then
+				game:GetService("Lighting").TimeOfDay = '12:00:00'
+			end
+
+			LocalPlayer.PlayerGui.Popup.Frame.Visible = not Configs['Hide Notify']
+			renderscreen(not Configs['White Screen'], Configs['Black Screen'])
+			LocalPlayer.Character:FindFirstChild('Humanoid').JumpPower = 50
+			LocalPlayer.Character:FindFirstChild('Humanoid').WalkSpeed = 60
+		end)
+	end	
+end)
+
+f.HuntBoss = spawn(function()
+	while task.wait() do
+		if not Configs['Auto Hunt Boss'] or  Configs['Select Boss Hunt'] == ("" or nil ) then
+			continue
+		end
+		local Monster = Configs['Select Boss Hunt']
+		if (not workspace.Monster.Mon:FindFirstChild(Monster) or not workspace.Monster.Boss:FindFirstChild(Monster)) then
+			for _, npc in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+				if npc and npc.Name == Monster and npc:FindFirstChild("HumanoidRootPart") then
+					Tp(npc:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,6,0))
+				end
+			end
+		end
+		for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+			if v and v.Name == Monster and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+				repeat task.wait()
+					getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+					Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+					f.useSkill()
+				until not Configs["Auto Hunt Boss"] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible
+			end
+		end
+		for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+			if v and v.Name == Monster and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+				repeat task.wait()
+					getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+					Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+					f.useSkill()
+				until not Configs["Auto Hunt Boss"] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible	
+			end
+		end
+	end
+end)
+
+UserInputService.InputBegan:Connect(function(input)
+	if  input.UserInputType == Enum.UserInputType.MouseButton1 and UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) and Configs['Ctrl Tp Toggle'] then
+		LocalPlayer.Character:MoveTo(Mouse.Hit.p)
+	end
+end)
+
+
+f.autoKillBoss = function()
+	pcall(function()
+		while task.wait(.3) do
+			if not Configs["Auto Hunt Boss"] then
+				continue
+			end
+			local QuestInfo = {
+				['Monster'] = Configs["Select Boss Hunt"],
+			}
+			if workspace:FindFirstChild('Areas') and not loadislan then
+				for i,v in pairs(workspace.Areas:GetChildren()) do wait()
+					Tp(v.CFrame * CFrame.new(0,255,0))
+				end
+				loadislan = true
+			end
+			
+			if (not workspace.Monster.Mon:FindFirstChild(QuestInfo['Monster']) or not workspace.Monster.Boss:FindFirstChild(QuestInfo['Monster'])) then
+				for _, npc in pairs(game:GetService("ReplicatedStorage").MOB:GetChildren()) do
+					if npc and npc.Name == QuestInfo['Monster'] and npc:FindFirstChild("HumanoidRootPart") then
+						Tp(npc:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,6,0))
+					end
+				end
+			end
+			for i,v in pairs(workspace.Monster.Mon:GetChildren()) do
+				if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+					repeat task.wait()
+						getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+						Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+						f.useSkill()
+					until not Configs["Auto Hunt Boss"] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible
+				end
+			end
+			for i,v in pairs(workspace.Monster.Boss:GetChildren()) do
+				if v and v.Name == QuestInfo['Monster'] and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+					repeat task.wait()
+						getgenv().PosMonSkill = v.HumanoidRootPart.CFrame
+						Tp(v.HumanoidRootPart.CFrame * Configs.standmethod)
+						f.useSkill()
+					until not Configs["Auto Hunt Boss"] or not v or not v.Parent or not v:FindFirstChild("Humanoid") or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health <= 0 or not LocalPlayer.PlayerGui.MainGui.QuestBoard.Visible	
+				end
+			end
+		end
+	end)
+end
+
+simmulateClick = function(button)
+	button.MouseButton1Click:Fire()
+	return "clicked"
+end
+
+function ClearClip()
+	if Character and Character.UpperTorso:FindFirstChild("BodyClip") then 
+		Character.UpperTorso:FindFirstChild("BodyClip").MaxForce = Vector3.new(0,0,0)
+		Character.UpperTorso:FindFirstChild("BodyClip").Velocity = Vector3.new(0,0,0) 
+		Character.UpperTorso:FindFirstChild("BodyClip"):Destroy()
+	end
+end
+
+local Toggle = function (section,Name,desc,...)
+	local SettingName,func = ...
+	if not SettingName then SettingName = Name end
+	
+	if type(SettingName) == "function" then
+		Callback = SettingName
+	end
+	
+	return section:AddToggle((Name or Name.."-toggle"), {
+		Text = Name or "null",
+		Default = Configs[SettingName] or false,
+		Tooltip = desc or "",
+		Callback = function(v)
+			if v == false then
+				ClearClip()
+			end
+			if type(SettingName) == "function" then
+				
+			end
+			local threadRunning
+			Configs[SettingName] = v
+			if f[SettingName] then
+				threadRunning = task.spawn(f[SettingName])
+			end
+			if (not v) and threadRunning then
+				task.cancel(threadRunning)
+			end
+		end
+	})
+end
+
+function Slider(section,Name,min,max,Compact,...)
+	local SettingName,func = ...
+	if not func and type(SettingName) == "function" then func = SettingName end
+	if not SettingName then SettingName = Name end
+	local default = Configs[SettingName]
+	return section:AddSlider((Name or Name.."-slider"), {
+		Text = Name or "null",
+		Min = min or 0,
+		Max = max or 1,
+		Default = (default ~= nil and default or min),
+		Rounding = (Compact == true and 1) or 0,
+		Compact = Compact,
+		Callback = function(v)
+			Configs[SettingName] = v
+		end
+	})
+end
+
+function TextBox(section,Name,tooltip,PlaceHolder,num,...)
+	local SettingName,func = ...
+	if not func and type(SettingName) == "function" then func = SettingName end
+	if not SettingName then SettingName = Name end
+	return section:AddInput((Name or Name.."-input"), {
+		Text = Name or "Null",
+		Placeholder = PlaceHolder or "Put text here!",
+		Numberic = num or false,
+		Finished = true,
+		Tooltip = tooltip or "",
+		Default = Configs[SettingName],
+		Callback = function(value)
+			Configs[SettingName] = value
+		end
+	})
+end
+
+function Dropdown(section,Name,default,list,multi,...)
+	local SettingName,func = ...
+	if not func and type(SettingName) == "function" then func = SettingName end
+	if not SettingName then SettingName = Name end
+	return section:AddDropdown((Name or Name.."-dropdown"), {
+		Text = Name or "Null",
+		Values = list or {"Null"},
+		Multi = multi or false,
+		Default = Configs[SettingName] or default or 1,
+		Callback = function(v)
+			Configs[SettingName] = v
+		end
+	})
+end
+
+
+
+local MainFarm = Tab.General:AddLeftGroupbox("Auto Farm") do
+	Toggle(MainFarm, "Auto Farm", " Starting Auto Farm Level ", "autofarm")
+	Toggle(MainFarm, "Auto Unlock Next Sea", " Auto Next Sea [ Second Sea , Third sea ] ", "AutoNextSea")
+end
+
+local DailyQuest = Tab.General:AddLeftGroupbox("Daily Quest") do
+	Dropdown(DailyQuest, "Choose Daily Quest : ", 1, DailyQuestTable, false, "Select Daily Quest")
+	Toggle(DailyQuest, "Auto Daily Quest", " Auto Daily Quest Select ", "AutoDailyQuest")
+end
+
+local Game_C = Tab.General:AddRightGroupbox("Configurations") do
+	Toggle(Game_C, "Double Attack", "It's make you faster farming, like it name.", "doubleattack")
+	Toggle(Game_C, "Activate Buso [ Unlocked ]", " Unlock Buso ( Not Have To Have ) ", "Activate Buso")
+	Toggle(Game_C, "Activate Ken [ Unlocked ]", " Unlock Ken Haki  ( Not Have To Have )", "Activate Ken")
+	Slider(Game_C, "Hight Position Monter", 1.00, 10.00, true, "RawStand")
+	Dropdown(Game_C, "Position Flying At : ", 1, {"Above","Normal","Below"}, false, "FlightAt")
+end
+
+local Setting_Farming = Tab.General:AddLeftGroupbox("Settings Farming") do
+	Dropdown(Setting_Farming, "Choose Skill : ", Configs['Auto Use Skill'], {"Z","X","C","V","B","E"}, true,"Auto Use Skill")
+	Toggle(Setting_Farming, "Auto Buso Haki", " Auto Open Buso Haki ", "Auto_Use_Haki")
+	Toggle(Setting_Farming, "Auto Observation Haki", " Auto Observation Haki ", "Auto Observation Haki")
+	Toggle(Setting_Farming, "Auto Use Skill", " Auto Use Skill Select ", "Auto Skill Toggle")
+
+end
+
+local auto_boss = Tab.General:AddLeftGroupbox("Auto Boss") do
+	local BossDropdown = Dropdown(auto_boss, "Choosed Boss : ", 1, f.getMarterBoss(), false, "Select Boss Hunt")
+	Toggle(auto_boss, "Auto Eliminate Boss", " Auto Kill Boss Select ", "Auto Hunt Boss")
+	auto_boss:AddButton("Refresh Boss DropDown", function()
+		BossDropdown:SetValues(f.getMarterBoss())
+	end)
+end
+
+local Auto_Stats = Tab.General:AddRightGroupbox("Stats Adding") do
+	Dropdown(Auto_Stats, "Choose stats : ", Configs["Stats_Upgrade"], {"Melee","Defense","Sword",'Fruit'}, true,"Stats_Upgrade")
+	Slider(Auto_Stats, "Stats Points Use", 1, 100, false, "StatsUsed")
+	Toggle(Auto_Stats, "Auto Upgrades", " Auto Up Stats Select ", "Auto Upgrades")
+end
+
+local OnSea = Tab.General:AddRightGroupbox("Sea king") do
+	Dropdown(OnSea, "Choose Monter : ", 1, {"Sea King", "Hydra", "Cursed Ship"}, false, "ChooseMonSea")
+	Toggle(OnSea, "Auto Hunt", " Auto Hunt Choosed Monter.", "Auto Sea Event")
+	Toggle(OnSea, "Hop Server", " Hop Server Not Found Mon.", "Auto Sea Event Hop")
+end
+
+local SwordTable = {
+	"Jitter",
+	"Tashi Blade",
+	"Shark Blade",
+	"Pole",
+	"Bisento",
+	"Saber",
+	"Mom Blade [ Legendary ]", -- Success
+	"Authentic Mace",
+	"Anubis Axe",
+	"Adventure Knife",
+	"Sunken Blade",
+	"Cookie Sword",
+	"Phoenix Blade [ Legendary ]", -- [ Hark Work ]
+	"Metal Trident",
+	"Longaevus [ Legendary ]", -- [ Hark Work ] 
+	"Hell Sword [ Legendary ]" -- [ Hark Work ]
+}
+
+local Auto_Found_Sword = Tab.General:AddLeftGroupbox("Automation Sword") do
+	Dropdown(Auto_Found_Sword, "Choose Weapon Normal : ", 1, SwordTable, false, "ChooseWeapon")
+	Toggle(Auto_Found_Sword, "Auto Found Sword", " Auto Found Sword Select ", "Auto Found Sword Toggle")
+end
+
+local Server_Box = Tab.General:AddRightGroupbox("Server") do
+	TextBox(Server_Box, "Enter JobID", "Put jobid here", "xxxx-xxxx-xxxx-xxxx", false, "Box Jobid")
+	Server_Box:AddButton("Copy Jobid", function()
+		setclipboard(game.JobId)
+		Library:Notify('Copy Success !', 3)
+	end)
+	Server_Box:AddButton("Join Jobid", function()
+		local Jobid = Configs['Box Jobid']
+		if Jobid == "" then
+			Library:Notify('Jobid Invalid !', 3)
+			return
+		end
+		game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, Configs['Box Jobid'], game.Players.LocalPlayer)
+		Library:Notify('Wait For Join Server', 3)
+	end)
+	Server_Box:AddButton("Hop Server ( Low Player )", function()
+		Library:Notify('Wait For Join Server', 3)
+		HopServer(false)
+	end)
+	Server_Box:AddButton("Hop Server ( Hight Player )", function()
+		HopServer(true)
+	end)
+	Server_Box:AddButton("Rejoin Server", function()
+		Rejoin()
+	end)
+end
+
+
+local Server_Box2 = Tab.General:AddLeftGroupbox("World ( "..Sea.." ) ") do
+	Server_Box2:AddButton("Teleport To Sea 1", function()
+		if Sea == 2 then
+			getQuestOld(CFrame.new(-3337, 17, 252))
+		end
+	end)
+	Server_Box2:AddButton("Teleport To Sea 2", function()
+		if Sea == 1 then
+			getQuestOld(CFrame.new(-2162, 18, -3990))
+		end
+	end)
+	Server_Box2:AddButton("Teleport To Sea 3", function()
+
+	end)
+end
+
+local Tap_Player = Tab.Player:AddLeftGroupbox("Players") do
+	Tap_Player:AddDropdown(("Select Player"), {
+		Text = "Choosed Player :",
+		SpecialType = 'Player',
+		Multi = false,
+		Default = 1,
+		Callback = function(v)
+			Configs["Select Player Dropdown"] = v
+		end
+	})
+	Toggle(Tap_Player, "Spectate Player", " View Camera Player ", "Spectate Player")
+	Tap_Player:AddButton("Teleport to", function()
+		if Configs["Select Player Dropdown"] then
+			Tp(game.Players[Configs["Select Player Dropdown"]].Character:FindFirstChild('HumanoidRootPart').CFrame, true)
+		end
+	end)
+end
+
+island = {}
+Npc = {}
+for i,v in pairs(GetPositionIsland()) do
+	table.insert(island, i)
+end
+for _,v in ipairs(workspace.AllNPC:GetChildren()) do
+	if  not (v.Name == "BuyShips" or v.Name == "SetSpawn") then
+		table.insert(Npc, v.Name)
+	end
+end
+
+local Tap_Teleport = Tab.Player:AddLeftGroupbox("Teleport") do
+	Dropdown(Tap_Teleport, "Choosed Island : ", 1, island, false, "Select Island Teleport")
+	Dropdown(Tap_Teleport, "Choosed Npc : ", 1, Npc, false, "Select Npc Teleport")
+
+	Tap_Teleport:AddButton("Teleport to island", function()
+		for i,v in pairs(GetPositionIsland()) do
+			if Configs["Select Island Teleport"] == i then
+				Tp(v * CFrame.new(0,50,0), true)
+			end
+		end
+	end)
+	Tap_Teleport:AddButton("Teleport to npc", function()
+		for _,v in ipairs(workspace.AllNPC:GetChildren()) do
+			if v.Name == Configs["Select Npc Teleport"] then
+				Tp(v.CFrame, true)
+			end
+		end
+	end)
+	Tap_Teleport:AddButton("Teleport to save zone", function()
+		local SaveZone = FindClosestSafezone()
+		if SaveZone then
+			Tp(SaveZone.CFrame * CFrame.new(0,50,0), true)
+		end
+	end)
+end
+
+local BypassScWalkJump = task.spawn(function()
+	LocalPlayer.Character:FindFirstChild('Humanoid'):GetPropertyChangedSignal("JumpPower"):Connect(function()
+		if Configs['Set Jump']  then
+			LocalPlayer.Character:FindFirstChild('Humanoid').JumpPower = Configs['Set Jump Power']
+		end
+	end)
+
+	LocalPlayer.Character:FindFirstChild('Humanoid'):GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+		if Configs['Set Walk'] then
+			LocalPlayer.Character:FindFirstChild('Humanoid').WalkSpeed = Configs['Set Walk Speed']
+		end
+	end)
+end)
+
+local Tap_Localplayer = Tab.Player:AddRightGroupbox("Players") do
+	Slider(Tap_Localplayer, "Walk Speed", 1, 300, false, "Set Walk Speed")
+	Slider(Tap_Localplayer, "Jump Power", 1, 300, false, "Set Jump Power")
+	Toggle(Tap_Localplayer, "Set Walk Speed", " Set You Walk Speed ", "Set Walk")
+	Toggle(Tap_Localplayer, "Set JumpPower", " Set You Jump Power ", "Set Jump")
+	Toggle(Tap_Localplayer, "Walk On Water", " Walk On Water ", "Walk On Water")
+	Toggle(Tap_Localplayer, "Noclip", " Walk In Wall ", "Noclip Toggle")
+	Toggle(Tap_Localplayer, "Ctrl Tp ( For PC )", " Ctrl + Click To Teleport ", "Ctrl Tp Toggle")
+	Tap_Localplayer:AddButton("Bring Fruits", function()
+		for i,v in pairs(workspace.AllDroppedFruit:GetDescendants()) do
+			if v.Name == "Handle" then
+				firetouchinterest(LocalPlayer.Character.HumanoidRootPart, v, 0)
+				firetouchinterest(LocalPlayer.Character.HumanoidRootPart, v, 1)
+			end
+		end
+		for i,v in pairs(workspace.AllspawnDF:GetDescendants()) do
+			if v.Name == "Handle" then
+				firetouchinterest(LocalPlayer.Character.HumanoidRootPart, v, 0)
+				firetouchinterest(LocalPlayer.Character.HumanoidRootPart, v, 1)
+			end
+		end
+	end)
+	Tap_Localplayer:AddButton("Fix Bug WalkSpeed / JumpPower", function()
+		task.cancel(BypassScWalkJump)
+		BypassScWalkJump = nil
+		BypassScWalkJump = task.spawn(function()
+			LocalPlayer.Character:FindFirstChild('Humanoid'):GetPropertyChangedSignal("JumpPower"):Connect(function()
+				if Configs['Set Jump']  then
+					LocalPlayer.Character:FindFirstChild('Humanoid').JumpPower = Configs['Set Jump Power']
+				end
+			end)
+
+			LocalPlayer.Character:FindFirstChild('Humanoid'):GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+				if Configs['Set Walk'] then
+					LocalPlayer.Character:FindFirstChild('Humanoid').WalkSpeed = Configs['Set Walk Speed']
+				end
+			end)
+		end)
+		Library:Notify(" Fix Bug Success! ", 3)
+	end)
+end
+
+local Tap_Visbile = Tab.Player:AddRightGroupbox("Visbile") do
+	Toggle(Tap_Visbile, "Unlock Fps ( 240 FPS )", " Unlock Fps You Divice ", "Unlock Fps")
+	Toggle(Tap_Visbile, "White Screen", " Mobile Not Recommend ( it will hurt ur eyes ) ", "White Screen")
+	Toggle(Tap_Visbile, "Black Screen", " Mobile Not Recommend ", "Black Screen")
+	Toggle(Tap_Visbile, "Day Only", " Day Time  ", "Day Only")
+	Toggle(Tap_Visbile, "Hide Notify", " Hiding Notify Game ", "Hide Notify")
+end
+
+local Dungeon = Tab.Misc:AddLeftGroupbox("Dungeon") do
+	Dropdown(Dungeon, "Choose Difficulty : ", 1, {"Easy","Normal","Hard"}, false, "Choose Difficulty")
+	Toggle(Dungeon, "Auto Dungeon", " Auto Dungeon ", "AutoClearDungeon")
+	Toggle(Dungeon, "Rejoin Dungeon", " Rejoin Dungeon For Farm Gems ", "")
+end
+
+
+
+local Soon = Tab.Misc:AddRightGroupbox(". Soon .") do
+	Soon:AddLabel("Coming Soon")
+	Soon:AddLabel("( Wait For Buyer Request )")
+end
+
+
+local MenuGroup = Tab['UI Settings']:AddLeftGroupbox('Configuration') do
+	MenuGroup:AddToggle("Auto Load Config", {
+		Text = "Auto Load Config",
+		Default = true,
+		Tooltip = "Auto Load",
+		Callback = function(Value)
+			writefile("Normal Auto Loading", tostring(Value))
+		end,
+	})
+	MenuGroup:AddButton('Unload', function() Library:Unload() end)
+	MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'RightControl', NoUI = true, Text = 'Menu keybind' })
+	Library.ToggleKeybind = Enum.KeyCode.RightControl
+	ThemeManager:SetLibrary(Library);
+	SaveManager:SetLibrary(Library);
+	SaveManager:IgnoreThemeSettings();
+	SaveManager:SetIgnoreIndexes({ 'MenuKeybind' });
+	ThemeManager:SetFolder('Normal Hub');
+	SaveManager:SetFolder('Normal Hub/games');
+	SaveManager:BuildConfigSection(Tab['UI Settings']);
+	ThemeManager:ApplyToTab(Tab['UI Settings']);
+end
